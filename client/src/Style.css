@@ -1,0 +1,27 @@
+html,body{
+    margin: 0px !important;
+}
+
+*{
+    font-family: 'Fira Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
+}
+
+.link-unstyled {
+    text-decoration: none;
+    color: inherit;
+    /* Add any other desired styles to remove styling */
+  }
+  
+
+  form{
+    display:grid;
+    justify-content: center;
+    align-items:center;
+    grid-column: 1/4; 
+  }
+
+  /* Assuming 'tableClassName' is the generated class name for the table */
+.custom-table {
+  background-color: rgb(175, 11, 11);
+}

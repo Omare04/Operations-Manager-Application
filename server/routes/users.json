@@ -1,0 +1,14 @@
+[{
+    "id": "123123",
+    "fname": "omar",
+    "lname": "El masaoudi",
+    "email" : "ex",
+    "position" : "Super-Admin"
+}, 
+{
+    "id": "0093",
+    "fname": "Reda",
+    "lname": "OUHDA",
+    "email" : "ex",
+    "position" : "Nurse"
+}]
