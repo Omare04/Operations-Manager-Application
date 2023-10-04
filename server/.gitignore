@@ -1,4 +1,4 @@
 .env
-MedicalEquipmentUnparsed.txt
-updated_stock_date.txt
-MedicalEquipmentParsed.json
+StockDataFiles/MedicalEquipmentUnparsed.txt
+StockDataFiles/updated_stock_date.txt
+StockDataFiles/MedicalEquipmentParsed.json
