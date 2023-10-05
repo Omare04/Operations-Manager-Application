@@ -54,20 +54,6 @@ MissionRouter.route("/FlightsPerPlane").get((req, res) => {
 });
 
 MissionRouter.route("/")
-  .post((req, res) => {
-    const query = `
-    INSERT INTO Missions(product_id, uid, call_sign, status, flight_num, quantity ,DateCreated, MissionDate, Depart, Arrive)
-    VALUES(49, 1684438792, "CN-TME", 0, "AOM-158", 3, CURRENT_DATE(), '2023-09-25', 'CMN', 'YUL');
-  `;
-
-    pool.query(query, (err, result) => {
-      if (err) {
-        res.status(500);
-      } else {
-        res.status(200).send({ message: "Success" });
-      }
-    });
-  })
   .get((req, res) => {
     const query = "SELECT mission_data FROM missions WHERE active = 0";
     let parsedArray = [];
@@ -114,21 +100,6 @@ MissionRouter.route("/Active").get((req, res) => {
       });
 
       res.send(parsedArray);
-    }
-  });
-});
-
-MissionRouter.route("/:flightNum").get((req, res) => {
-  const query =
-    "SELECT product_name, Missions.quantity FROM Missions \
-    INNER JOIN Drug_stock ON Drug_stock.product_id = Missions.product_id \
-    WHERE flight_num = ?";
-
-  pool.query(query, req.params.flightNum, (err, result) => {
-    if (err) {
-      res.status(500).send({ message: err });
-    } else {
-      res.status(200).send(result);
     }
   });
 });

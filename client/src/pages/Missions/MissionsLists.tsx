@@ -89,6 +89,11 @@ export function ActiveMissionList() {
       });
   }, []);
 
+  const openActiveOrderModal = ( index, flightNum ) => {
+    return <>
+    </>;
+  };
+
   return (
     <StyledTableWrapper>
       <StyledTable>
@@ -97,12 +102,12 @@ export function ActiveMissionList() {
           <StyledTableRows key={index}>
             <StyledTableItems>
               {value.flightInfo.flightNumber} ({value.flightInfo.date})
-              <StyledEllipsis
-                onClick={() => {
-                  console.log(value.flight_num);
-                }}
-              >
-                <FaIcons.FaEllipsisH />
+              <StyledEllipsis>
+                <FaIcons.FaEllipsisH
+                  onClick={() =>
+                    openActiveOrderModal(index, value.flightInfo.flightNumber)
+                  }
+                />
               </StyledEllipsis>
             </StyledTableItems>
           </StyledTableRows>
