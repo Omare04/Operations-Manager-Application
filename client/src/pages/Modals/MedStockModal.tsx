@@ -134,7 +134,7 @@ export default function MedStockModal({ open, data, onClose }) {
                 ],
               })
               .then((result) => {
-                console.log("UpdateEvent request success:", result);
+                // console.log("UpdateEvent request success:", result);
                 if (result.status === 200) {
                   location.reload();
                   ``;

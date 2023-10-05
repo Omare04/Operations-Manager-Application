@@ -34,9 +34,6 @@ const StyledMedicalEquipmentBox = styled.div`
 export function MedicalEquipmentBox({ flightNum }) {
   const [data, setData] = useState([{}]);
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
 
   useEffect(() => {
     axios

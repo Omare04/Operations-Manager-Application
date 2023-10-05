@@ -222,7 +222,7 @@ export function Orderdetails() {
           }
         })
         .catch((error) => {
-          console.log(error);
+          // console.log(error);
         });
     } else {
     }
@@ -285,7 +285,7 @@ function Supplierdetails() {
         setNumOfOrders(res.data);
       })
       .catch((e) => {
-        console.log(e);
+        // console.log(e);
       });
   }, []);
 

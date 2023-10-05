@@ -55,7 +55,6 @@ export const useAuthWrapper = () => {
       .then((res) => {
         //This returns the boolean from the backend which is the object sent from the backend.
         if (res.data.loggedIn) {
-          console.log(res.data.message);
           nav("/");
         } else {
           return "error message";

@@ -342,5 +342,5 @@ export function ActiveOrderData({ arr }) {
 }
 
 export function MedOrderTableData({ arr }) {
-  console.log(arr);
+  // console.log(arr);
 }

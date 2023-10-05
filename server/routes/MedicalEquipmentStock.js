@@ -1,6 +1,6 @@
 import express from "express";
 import mysql from "mysql2";
-import MedicalEquipmentParsed from "../StockDataFiles/MedicalEquipmentParsed.json" assert { type: "json" };
+// import MedicalEquipmentParsed from "../StockDataFiles/MedicalEquipmentParsed.json" assert { type: "json" };
 
 const MedEquipmentRouter = express.Router();
 

@@ -13,7 +13,7 @@ export function Fetch({ type,route }) {
           setData(data);
         })
         .catch(err => {
-          console.log(err)
+          // console.log(err)
         });
     }, [type]);
   

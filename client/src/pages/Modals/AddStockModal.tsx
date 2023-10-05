@@ -239,7 +239,7 @@ export function AddStockModalEXP({ open, onClose }) {
             .then((result) => {})
             .catch((e) => {
               setErrorInserting(true);
-              console.log(e.message);
+              // console.log(e.message);
               setTimeout(() => {
                 setErrorInserting(false);
               }, 5000);
@@ -745,7 +745,7 @@ export function AddMedicalEquipmentStockModal({ open, onClose }) {
     const formattedDate =
       date.$y + "-" + formattedMonth(date.$M) + "-" + date.$D;
 
-    console.log(formattedDate);
+    // console.log(formattedDate);
     if (
       SanitizeInputs(values.productName, values.quantity, values.location, date)
     ) {
@@ -2034,7 +2034,7 @@ export function ViewMissionModal({ open, onClose, data }) {
       alert("Please Complete All fields");
     }
   };
-  
+
   const renderPages = (counter) => {
     if (counter === 0) {
       return <MissionFlightDetails />;
@@ -2045,11 +2045,9 @@ export function ViewMissionModal({ open, onClose, data }) {
     } else if (counter === 3) {
       return <AddCrewMissionsPage page={counter} />;
     } else if (counter === 4) {
-      return checkEntryOfFields(counter); 
+      return checkEntryOfFields(counter);
     }
   };
-  
-  
 
   function handleSubmit() {}
 
@@ -2375,7 +2373,7 @@ function AddDrugsMissionsPage({ page }) {
   }, [page]);
 
   useEffect(() => {
-    console.log(missionState);
+    // console.log(missionState);
   }, [asyncSelect]);
 
   const changeQty = (index, value) => {
@@ -2797,79 +2795,158 @@ const StyledNotesBox = styled.div`
   word-wrap: break-word;
   padding: 5px;
 `;
-
+const StyledLoadingBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+`;
+const StyledStatusMessage = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: ${(props) => (props.messageColor == "error" ? "red" : "green")};
+  font-weight: bold;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  font-size: 20px;
+`;
 function MissionSummaryPage(page) {
+  const [loading, setLoading] = useState(false);
+  const [statusSuccess, setStatusSuccess] = useState(false);
+  const [statusError, setStatusError] = useState(false);
+
   const { missionState, setMissionState } =
     React.useContext(missionDataContext);
 
-  useEffect(() => {
-    console.log(missionState.flightInfo.departure);
-  }, [missionState]);
-
   const handleSubmit = () => {
-    const stringifiedData = JSON.stringify(missionState); 
-    console.log(stringifiedData); 
+    setLoading(true);
+    const stringifiedData = JSON.stringify(missionState);
     axios
-      .post("http://localhost:3331/Missions/NewMission", { data: missionState })
-      .then((result) => {});
+      .post("http://localhost:3331/Missions/NewMission", {
+        data: stringifiedData,
+      })
+      .then((result) => {
+        setTimeout(() => {
+          setLoading(false);
+          setStatusSuccess(true);
+          setTimeout(() => {
+            setStatusSuccess(false);
+            location.reload();
+          }, 3000);
+        }, 2000);
+      })
+      .catch((e) => {
+        setTimeout(() => {
+          setLoading(false);
+          setStatusError(true);
+          setTimeout(() => {
+            setStatusError(false);
+            location.reload();
+          }, 3000);
+        }, 2000);
+      });
   };
-  return (
-    <>
-      <StyledFlightDetailsSummary>
-        <StyledSubSectionHeader> Flight Details</StyledSubSectionHeader>
-        <StyledGreyLine
-          style={{ width: "100%", marginBottom: "15px", marginTop: "5px" }}
-        />
-        <StyledInfoMissionSummary>
-          Flight NO:
-          <span style={{ color: "#575757", paddingLeft: "4px" }}>
-            {missionState.flightInfo.flightNumber}
-          </span>
-        </StyledInfoMissionSummary>
-        <StyledInfoMissionSummary>
-          Plane:{" "}
-          <span style={{ color: "#575757", paddingLeft: "4px" }}>
-            {missionState.flightInfo.plane}
-          </span>
-        </StyledInfoMissionSummary>
-        <StyledInfoMissionSummary style={{ paddingBottom: "0px" }}>
-          <span style={{ color: "#575757" }}>
-            {" "}
-            {missionState.flightInfo.departure}
-          </span>
-          <StyledArrow>
-            {" "}
-            <FaIcons.FaArrowRight />
-          </StyledArrow>
-          <span style={{ color: "#575757" }}>
-            {missionState.flightInfo.arrival}
-          </span>
 
-          <span style={{ color: "#575757", paddingLeft: "10px" }}>
-            ({missionState.flightInfo.date})
-          </span>
-        </StyledInfoMissionSummary>
-        <StyledGreyLine
-          style={{ width: "100%", marginBottom: "0px", marginTop: "15px" }}
-        />
-      </StyledFlightDetailsSummary>
-      <StyledFlightDetailsSummary>
-        <MissionSummaryToggleList
-          data={missionState}
-        ></MissionSummaryToggleList>
-        <StyledGreyLine
-          style={{ width: "100%", marginBottom: "5px", marginTop: "20px" }}
-        />
-        <StyledSubSectionHeader style={{ paddingTop: "15px" }}>
-          {" "}
-          Additional Notes
-        </StyledSubSectionHeader>
-        <StyledGreyLine
-          style={{ width: "100%", marginBottom: "10px", marginTop: "6px" }}
-        />
-        <StyledNotesBox>{missionState.flightInfo.notes}</StyledNotesBox>
-      </StyledFlightDetailsSummary>
-      <CreateMission onClickFunc={() => handleSubmit()} />
-    </>
+  const renderStatusPage = () => {
+    return statusError ? (
+      <>
+        <StyledStatusMessage messageColor={"error"}>
+          <FaIcons.FaExclamation
+            style={{
+              color: "red",
+              fontSize: "40px",
+              paddingBottom: "35px",
+            }}
+          />
+          There Was An Error Creating this mission, please try again later. If
+          this error persists, contact admin for help
+        </StyledStatusMessage>
+      </>
+    ) : statusSuccess ? (
+      <>
+        <StyledStatusMessage messageColor={"Success"}>
+          <FaIcons.FaCheck
+            style={{
+              color: "green",
+              fontSize: "40px",
+              paddingBottom: "10px",
+            }}
+          />
+          {missionState.flightInfo.flightNumber} Has been successfully created
+        </StyledStatusMessage>
+      </>
+    ) : (
+      <>
+        <StyledFlightDetailsSummary>
+          <StyledSubSectionHeader>Flight Details</StyledSubSectionHeader>
+          <StyledGreyLine
+            style={{ width: "100%", marginBottom: "15px", marginTop: "5px" }}
+          />
+          <StyledInfoMissionSummary>
+            Flight NO:
+            <span style={{ color: "#575757", paddingLeft: "4px" }}>
+              {missionState.flightInfo.flightNumber}
+            </span>
+          </StyledInfoMissionSummary>
+          <StyledInfoMissionSummary>
+            Plane:{" "}
+            <span style={{ color: "#575757", paddingLeft: "4px" }}>
+              {missionState.flightInfo.plane}
+            </span>
+          </StyledInfoMissionSummary>
+          <StyledInfoMissionSummary style={{ paddingBottom: "0px" }}>
+            <span style={{ color: "#575757" }}>
+              {" "}
+              {missionState.flightInfo.departure}
+            </span>
+            <StyledArrow>
+              {" "}
+              <FaIcons.FaArrowRight />
+            </StyledArrow>
+            <span style={{ color: "#575757" }}>
+              {missionState.flightInfo.arrival}
+            </span>
+            <span style={{ color: "#575757", paddingLeft: "10px" }}>
+              ({missionState.flightInfo.date})
+            </span>
+          </StyledInfoMissionSummary>
+          <StyledGreyLine
+            style={{ width: "100%", marginBottom: "0px", marginTop: "15px" }}
+          />
+        </StyledFlightDetailsSummary>
+        <StyledFlightDetailsSummary>
+          <MissionSummaryToggleList
+            data={missionState}
+          ></MissionSummaryToggleList>
+          <StyledGreyLine
+            style={{ width: "100%", marginBottom: "5px", marginTop: "20px" }}
+          />
+          <StyledSubSectionHeader style={{ paddingTop: "15px" }}>
+            {" "}
+            Additional Notes
+          </StyledSubSectionHeader>
+          <StyledGreyLine
+            style={{ width: "100%", marginBottom: "10px", marginTop: "6px" }}
+          />
+          <StyledNotesBox>{missionState.flightInfo.notes}</StyledNotesBox>
+        </StyledFlightDetailsSummary>
+        <CreateMission onClickFunc={() => handleSubmit()} />
+      </>
+    );
+  };
+
+  return loading ? (
+    <StyledLoadingBox>
+      <CircularProgress value={loading} />
+    </StyledLoadingBox>
+  ) : (
+    renderStatusPage()
   );
 }

@@ -37,10 +37,8 @@ function App() {
     axios
       .post("http://localhost:3331/users/token", { token: cookie })
       .then((res) => {
-        console.log(res.data);
       })
       .catch((e) => {
-        console.log(e.status);
       });
   }, [cookie]);
 

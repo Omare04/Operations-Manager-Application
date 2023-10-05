@@ -109,11 +109,11 @@ export function ActiveOrders() {
     axios
       .get("http://localhost:3331/Orders/ActiveCount")
       .then((result) => {
-        console.log("here " + result);
+        // console.log("here " + result);
         setActiveOrdersCount(result.data.payload);
       })
       .catch((e) => {
-        console.log(e.message);
+        // console.log(e.message);
       });
   }, [activeOrdersCount]);
 
@@ -154,7 +154,7 @@ export function ApproachingExpiry() {
         setData(res.data);
       })
       .catch((e) => {
-        console.log(e);
+        // console.log(e);
       });
   }, [data]);
 

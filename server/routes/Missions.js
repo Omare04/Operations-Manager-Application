@@ -111,14 +111,12 @@ MissionRouter.route("/:flightNum").get((req, res) => {
 });
 
 MissionRouter.route("/NewMission").post((req, res) => {
-  //req.body is already stringified.
 
-  const query = "INSERT INTO missions(missions_data) VALUES ?";
+  const query = `INSERT INTO missions(mission_data) VALUES (?)`;
 
   pool.query(query, req.body.data, (err, result) => {
     if (err) {
       res.status(500);
-      console.log(err)
     } else {
       res.status(200).send({ message: "Insert Success" });
     }

@@ -714,7 +714,7 @@ export function OrderTable({ route, table_height, subMenuRoute, deleteRoute }) {
   const [orderId, setOrderId] = useState(0);
 
   const handelEdit = (item) => {
-    console.log(item);
+    // console.log(item);
     setOrderId(item.order_id);
     setModalStatus((prevStatus) => ({
       ...prevStatus,
@@ -830,7 +830,7 @@ export function OrderTable({ route, table_height, subMenuRoute, deleteRoute }) {
         setData(payload.data);
       })
       .catch((e) => {
-        console.log(e);
+        // console.log(e);
       });
   }, [route]); // Include 'route' in the dependency array to re-fetch data when the route changes
 
@@ -860,7 +860,7 @@ export function OrderTable({ route, table_height, subMenuRoute, deleteRoute }) {
           setOrderDetails(result.data);
         })
         .catch((e) => {
-          console.log(e);
+          // console.log(e);
         });
     }
   }, [indexState]);

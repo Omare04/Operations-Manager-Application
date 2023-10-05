@@ -112,12 +112,10 @@ function Header({ toggle, sidebar }) {
       .then((response) => {
         const { loggedIn } = response.data;
         if (loggedIn === false) {
-          console.log(":asdasdadasd");
         }
       })
       .catch((error) => {
         // Handle any error that occurs during the request
-        console.log(error);
       });
       location.reload();
     };
