@@ -28,14 +28,27 @@ const pool = mysql.createPool({
 export const MissionRouter = express.Router();
 
 MissionRouter.route("/FlightsPerPlane").get((req, res) => {
-  const query =
-    "SELECT call_sign ,COUNT(DISTINCT flight_num) AS NumberOfFlights FROM missions GROUP BY call_sign";
+  const query = "SELECT mission_data FROM missions";
+  let planesData = [];
 
   pool.query(query, (err, result) => {
     if (err) {
-      res.status(500);
+      res.status(500).json({ error: "Database error" });
     } else {
-      res.send(result).status(200);
+      result.forEach((row) => {
+        const parsedData = JSON.parse(row.mission_data);
+        const plane = parsedData.flightInfo.plane;
+
+        const planeIndex = planesData.findIndex((item) => item.name === plane);
+
+        if (planeIndex !== -1) {
+          planesData[planeIndex].NumberOfFlights++;
+        } else {
+          planesData.push({ name: plane, NumberOfFlights: 1 });
+        }
+      });
+
+      res.json(planesData);
     }
   });
 });
@@ -56,13 +69,19 @@ MissionRouter.route("/")
     });
   })
   .get((req, res) => {
-    const query = "SELECT mission_data FROM missions";
+    const query = "SELECT mission_data FROM missions WHERE active = 0";
+    let parsedArray = [];
 
     pool.query(query, (err, result) => {
       if (err) {
         res.status(500).send("Internal Server Error");
       } else {
-        res.status(200).send(result);
+        result.map((value, index) => {
+          const parsedData = JSON.parse(result[index].mission_data);
+          parsedArray.push(parsedData);
+        });
+
+        res.send(parsedArray);
       }
     });
   });
@@ -82,15 +101,19 @@ MissionRouter.route("/PieChart").get((req, res) => {
 });
 
 MissionRouter.route("/Active").get((req, res) => {
-  const query =
-    "SELECT flight_num, DATE_FORMAT(MissionDate, '%Y/%m/%d') AS FormattedDate, Depart, Arrive FROM Missions \
-   WHERE status = 1 GROUP BY flight_num ";
+  const query = "SELECT mission_data, active FROM missions WHERE active = 1";
+  let parsedArray = [];
 
   pool.query(query, (err, result) => {
     if (err) {
-      res.status(500);
+      res.status(500).send("Internal Server Error");
     } else {
-      res.status(200).send(result);
+      result.map((value, index) => {
+        const parsedData = JSON.parse(result[index].mission_data);
+        parsedArray.push(parsedData);
+      });
+
+      res.send(parsedArray);
     }
   });
 });
@@ -111,7 +134,6 @@ MissionRouter.route("/:flightNum").get((req, res) => {
 });
 
 MissionRouter.route("/NewMission").post((req, res) => {
-
   const query = `INSERT INTO missions(mission_data) VALUES (?)`;
 
   pool.query(query, req.body.data, (err, result) => {

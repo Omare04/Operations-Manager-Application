@@ -245,8 +245,7 @@ const StyledPastMissionsBox = styled.div`
 function PastMissionBoxes() {
   useEffect(() => {
     axios.get("http://localhost:3331/missions").then((result) => {
-
-      const parsedData = JSON.parse(result.data[0].mission_data);
+      
     });
   }, []);
   return (

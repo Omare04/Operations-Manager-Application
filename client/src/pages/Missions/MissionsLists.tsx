@@ -81,6 +81,7 @@ export function ActiveMissionList() {
     axios
       .get("http://localhost:3331/Missions/Active")
       .then((result) => {
+        console.log(result.data);
         setData(result.data);
       })
       .catch((err) => {
@@ -95,7 +96,7 @@ export function ActiveMissionList() {
         {Object.values(data).map((value, index) => (
           <StyledTableRows key={index}>
             <StyledTableItems>
-              {value.flight_num} ({value.FormattedDate})
+              {value.flightInfo.flightNumber} ({value.flightInfo.date})
               <StyledEllipsis
                 onClick={() => {
                   console.log(value.flight_num);
@@ -128,12 +129,12 @@ export function PastMissionsList() {
   const columns = useMemo(
     () => [
       {
-        accessorKey: "flight_num",
+        accessorKey: "flightInfo.flightNumber",
         header: "Flight NO",
         size: 150,
       },
       {
-        accessorKey: "FormattedDate",
+        accessorKey: "flightInfo.date",
         header: "Date",
         size: 150,
       },
@@ -170,23 +171,22 @@ export function PastMissionsList() {
               },
             }}
             renderTopToolbarCustomActions={({ table }) => (
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: "1rem",
-                    p: "0.5rem",
-                    flexWrap: "wrap",
-                  }}
-                >
-                  Add Supplier
-                </Box>
-
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: "1rem",
+                  p: "0.5rem",
+                  flexWrap: "wrap",
+                }}
+              >
+                Add Supplier
+              </Box>
             )}
             initialState={{ showColumnFilters: false, showGlobalFilter: false }}
             enableFullScreenToggle={false}
             enableDensityToggle={false}
             enableHiding={false}
-            enableRowActions = {true}
+            enableRowActions={true}
             renderRowActions={({ row, table }) => (
               <Box
                 sx={{
