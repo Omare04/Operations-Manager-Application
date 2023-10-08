@@ -16,6 +16,7 @@ import {
   AddMaintenanceStockModal,
   AddMedicalStockModal,
   AddMedicalEquipmentStockModal,
+  EditMedicalEquipmentStockModal,
 } from "../Modals/AddStockModal";
 import {
   Dialog,
@@ -76,8 +77,17 @@ function MedicalEquipmentStock() {
   const [data, setData] = useState([{}]);
   const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState(false);
+  const [editModal, setEditModal] = useState({});
   const [clickMessage, setClickMessage] = useState("");
   const [clickState, setClickState] = useState(false);
+
+  const handleEditModalOpen = (index) => {
+    setEditModal({ ...editModal, [index]: true });
+  };
+
+  const handleEditModalClose = (index) => {
+    setEditModal({ ...editModal, [index]: false });
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -103,7 +113,7 @@ function MedicalEquipmentStock() {
         size: 200,
       },
       {
-        accessorKey: "date_of_expiration",
+        accessorKey: "FormatedDate",
         header: "Date Of Expiration",
         size: 150,
       },
@@ -127,6 +137,26 @@ function MedicalEquipmentStock() {
 
   const handleClick = () => {};
 
+  const handleRowDelete = (productId, productName) => {
+    const confirm = window.confirm(
+      `Are you sure you want to delete ${productName}`
+    );
+
+    if (confirm) {
+      axios
+        .delete(`http://localhost:3331/MedicalEquipmentStock/${productId}`)
+        .then((result) => {
+          alert(`${productName} has been removed from the stock`);
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+        })
+        .catch((err) => {
+          alert(`There was an error removing this item from the stock`);
+        });
+    }
+  };
+
   return (
     <Grid>
       <StyledHeader> Medical Equipment Stock</StyledHeader>
@@ -148,7 +178,6 @@ function MedicalEquipmentStock() {
                 borderRight: "2px solid #ecececb6",
               },
             }}
-            // enableEditing
             initialState={{
               showColumnFilters: true,
               showGlobalFilter: false,
@@ -164,15 +193,24 @@ function MedicalEquipmentStock() {
             renderRowActions={({ row, table }) => (
               <Box sx={{ display: "flex", gap: "1rem" }}>
                 <Tooltip arrow placement="left" title="Edit">
-                  <IconButton onClick={() => table.setEditingRow(row)}>
+                  <IconButton onClick={() => handleEditModalOpen(row.index)}>
                     <Edit />
                   </IconButton>
                 </Tooltip>
-
+                <EditMedicalEquipmentStockModal
+                  data={row.original}
+                  open={editModal[row.index] || false}
+                  onClose={() => handleEditModalClose(row.index)}
+                />
                 <Tooltip arrow placement="right" title="Delete">
                   <IconButton
                     color="error"
-                    onClick={() => (console.log(row))}
+                    onClick={() =>
+                      handleRowDelete(
+                        row.original.product_id,
+                        row.original.product_name
+                      )
+                    }
                   >
                     <Delete />
                   </IconButton>

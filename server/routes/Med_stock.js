@@ -225,6 +225,55 @@ MedRouter.route("/StockUpdate").put((req, res) => {
   });
 });
 
+MedRouter.route("/StockUpdateMission/:ID").put((req, res) => {
+  const query = "SELECT quantity FROM Drug_stock WHERE product_id = ?";
+  pool.query(query, req.params.ID, (err, result) => {
+    if (err) {
+      res.status(500);
+    } else {
+      const productOldQty = result[0].quantity;
+      const productRemoveQty = req.body.quantity;
+      const newQty = productOldQty - productRemoveQty;
+
+      const updateStockQuery = `UPDATE Drug_stock SET quantity = ${newQty} WHERE product_id = ? `;
+      pool.query(updateStockQuery, req.params.ID, (error, resposne) => {
+        if (error) {
+          res.send({ message: "Error Updating the value" }).status(500);
+        } else {
+          const insertIntoERHistoryQuery =
+            "INSERT INTO ExitEntryMedHistory(product_id, uid, quantity, FlightNum, type, added_at) VALUES (?,?,?,?,?,?)";
+
+          const currentDate = new Date();
+
+          const year = currentDate.getFullYear();
+          const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+          const day = String(currentDate.getDate()).padStart(2, "0");
+          const formattedDate = `${year}-${month}-${day}`;
+          
+          pool.query(
+            insertIntoERHistoryQuery,
+            [
+              req.params.ID,
+              1684438793,
+              productRemoveQty,
+              req.body.flightNumber,
+              "Remove",
+              formattedDate,
+            ],
+            (ErERR, ErResult) => {
+              if (ErERR) {
+                res.status(500);
+              } else {
+                res.status(200);
+              }
+            }
+          );
+        }
+      });
+    }
+  });
+});
+
 MedRouter.route("/StockEntries").post((req, res) => {
   const query =
     "INSERT INTO ExitEntryMedHistory (product_id, uid, quantity, FlightNum,type, added_at) VALUES \

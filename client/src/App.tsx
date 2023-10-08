@@ -24,6 +24,7 @@ import PrivateRoutes from "./Helper/privateRoutes";
 import Missions from "./pages/Missions/Missions";
 import styled from "styled-components";
 import MedicalEquipmentStock from "./pages/Stock/MedicalEquipmentStock";
+import ExitEntryHistoryEquipment from "./pages/Stock/ExitEntryHistoryEquipment";
 
 function App() {
   const [cookie, setCookie] = useState(null);
@@ -52,6 +53,7 @@ function App() {
           <Route path="/pages/Missions/Missions" element={<Missions />} />
           <Route path="/pages/Plane_List" element={<Plane_list />} />
           <Route path="/pages/Stock/Drug_stock" element={<Drug_stock />} />
+          <Route path="/pages/Stock/ExitEntryHistoryEquipment" element={<ExitEntryHistoryEquipment/>} />
           <Route path="/pages/Stock/MedicalEquipmentStock" element={<MedicalEquipmentStock/>} />
           <Route
             path="/pages/Orders/ViewMedOrders"

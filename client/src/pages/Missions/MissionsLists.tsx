@@ -12,6 +12,11 @@ import { ClickAwayListener } from "@mui/base/ClickAwayListener";
 import { Box, Button } from "@mui/material";
 import { MaterialReactTable } from "material-react-table";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import {
+  ViewMissionModalSummary,
+  ViewPastMissionModalSummary,
+} from "../Modals/AddStockModal";
+import { useAsync } from "react-select/async";
 
 const StyledTableWrapper = styled.div`
   overflow-y: auto;
@@ -22,10 +27,10 @@ const StyledTableWrapper = styled.div`
 
 const StyledTable = styled.table`
   width: 100%;
-  padding: 5px;
-  border-radius: 10px;
+  height: 270px;
+  background-color: #dadada;
   overflow: auto;
-  border-spacing: 0.5px;
+  border-spacing: 0px;
 `;
 
 const StyledTableRows = styled.tr`
@@ -74,14 +79,33 @@ const TableWrap = styled.div`
   padding-bottom: 5px;
 `;
 
+const StyledNoTableItemsMessage = styled.div`
+  color: #a9a9a9;
+  font-style: italic; 
+  display: flex;
+  align-items: center;
+  font-size: 30px;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+`;
+
 export function ActiveMissionList() {
   const [data, setData] = useState([]);
+  const [modalOpen, setModalOpen] = useState({});
+
+  const handleOpenModal = (index) => {
+    setModalOpen({ ...modalOpen, [index]: true });
+  };
+
+  const handleCloseModal = (index) => {
+    setModalOpen({ ...modalOpen, [index]: false });
+  };
 
   useEffect(() => {
     axios
       .get("http://localhost:3331/Missions/Active")
       .then((result) => {
-        console.log(result.data);
         setData(result.data);
       })
       .catch((err) => {
@@ -89,37 +113,56 @@ export function ActiveMissionList() {
       });
   }, []);
 
-  const openActiveOrderModal = ( index, flightNum ) => {
-    return <>
-    </>;
-  };
-
   return (
-    <StyledTableWrapper>
-      <StyledTable>
-        <StyledTableHeaders> Mission Number</StyledTableHeaders>
-        {Object.values(data).map((value, index) => (
-          <StyledTableRows key={index}>
-            <StyledTableItems>
-              {value.flightInfo.flightNumber} ({value.flightInfo.date})
-              <StyledEllipsis>
-                <FaIcons.FaEllipsisH
-                  onClick={() =>
-                    openActiveOrderModal(index, value.flightInfo.flightNumber)
-                  }
-                />
-              </StyledEllipsis>
-            </StyledTableItems>
-          </StyledTableRows>
-        ))}
-      </StyledTable>
-    </StyledTableWrapper>
+    <>
+      <StyledTableWrapper>
+        {data.length === 0 ? (
+          <StyledNoTableItemsMessage>
+            No Active Missions
+          </StyledNoTableItemsMessage>
+        ) : (
+          <StyledTable>
+            <StyledTableHeaders> Mission Number</StyledTableHeaders>
+            {data.map((value, index) => (
+              <StyledTableRows key={index}>
+                <StyledTableItems>
+                  {value.parsedData.flightInfo.flightNumber} (
+                  {value.parsedData.flightInfo.date})
+                  <StyledEllipsis>
+                    <FaIcons.FaEllipsisH
+                      onClick={() => handleOpenModal(index)}
+                    />
+                    <ViewMissionModalSummary
+                      openModal={modalOpen[index] || false}
+                      data={data[index].parsedData}
+                      id={data[index].id}
+                      onClose={() => handleCloseModal(index)}
+                      active={true}
+                    />
+                  </StyledEllipsis>
+                </StyledTableItems>
+              </StyledTableRows>
+            ))}
+          </StyledTable>
+        )}
+      </StyledTableWrapper>
+    </>
   );
 }
 
 export function PastMissionsList() {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
+
+  const [modalOpen, setModalOpen] = useState({});
+
+  const handleOpenModal = (index) => {
+    setModalOpen({ ...modalOpen, [index]: true });
+  };
+
+  const handleCloseModal = (index) => {
+    setModalOpen({ ...modalOpen, [index]: false });
+  };
 
   useEffect(() => {
     axios
@@ -203,13 +246,17 @@ export function PastMissionsList() {
               >
                 <IconButton
                   color="primary"
-                  onClick={
-                    () => console.log("SOMETHING")
-                    //This will open the Mission Summary Modal
-                  }
+                  onClick={() => handleOpenModal(row.index)}
                 >
                   <FaIcons.FaEye />
                 </IconButton>
+                <ViewPastMissionModalSummary
+                  openModal={modalOpen[row.index] || false}
+                  data={row.original}
+                  id={row.original.id}
+                  onClose={() => handleCloseModal(row.index)}
+                  active={true}
+                />
               </Box>
             )}
             renderTopToolbarCustomActions={({ table }) => (

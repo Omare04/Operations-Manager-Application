@@ -177,7 +177,6 @@ export default function ExitEntryHistory() {
               >
                 <Button
                   color="primary"
-                  //export all data that is currently in the table (ignore pagination, sorting, filtering, etc.)
                   startIcon={<FileDownloadIcon />}
                   variant="contained"
                   onClick={() => {
@@ -187,7 +186,6 @@ export default function ExitEntryHistory() {
                   Export Stock Entries
                 </Button>
                 <Button
-                  //export all rows, including from the next page, (still respects filtering and sorting)
                   startIcon={<FileDownloadIcon />}
                   variant="contained"
                   onClick={() => {

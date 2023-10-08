@@ -14,7 +14,7 @@ import {
   AddToStock,
   CreateMissionButton,
 } from "../../components/content/Input_components";
-import { ViewMissionModal } from "../Modals/AddStockModal";
+import { ViewMissionModal, ViewMissionModalSummary } from "../Modals/AddStockModal";
 
 const Grid = styled.div`
   display: grid;
@@ -99,10 +99,10 @@ function Missions() {
       <Grid>
         <StyledHeader>Medical Evacuation Missions</StyledHeader>
         <ActiveMissionsBox></ActiveMissionsBox>
+        <PastMissionBoxes> </PastMissionBoxes>
         <ChartBox></ChartBox>
         <PersoneleBox></PersoneleBox>
         <ExtraBox></ExtraBox>
-        <PastMissionBoxes> </PastMissionBoxes>
       </Grid>
     </>
   );
@@ -211,7 +211,6 @@ function PersoneleBox() {
   return (
     <>
       <StyledPersoneleWrapper>
-        Most popular destinations{" "}
       </StyledPersoneleWrapper>
     </>
   );
@@ -228,7 +227,7 @@ const StyledExtraBoxWrapper = styled.div`
 function ExtraBox() {
   return (
     <>
-      <StyledExtraBoxWrapper>EXTRA</StyledExtraBoxWrapper>
+      <StyledExtraBoxWrapper></StyledExtraBoxWrapper>
     </>
   );
 }
@@ -244,9 +243,7 @@ const StyledPastMissionsBox = styled.div`
 
 function PastMissionBoxes() {
   useEffect(() => {
-    axios.get("http://localhost:3331/missions").then((result) => {
-      
-    });
+    axios.get("http://localhost:3331/missions").then((result) => {});
   }, []);
   return (
     <>

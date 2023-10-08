@@ -21,11 +21,22 @@ const pool = mysql.createPool({
 });
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MAKE AN ALGO THAT RECOMENDS MATERIAL BASED ON THE FLIGHT LENGTH PATIENT CONDITION AND DIFFERENT FACTORS IN A FUTURE UPDATE //
+// MAKE AN ALGO THAT RECOMENDS MATERIAL BASED ON THE FLIGHT LENGTH, PATIENT CONDITION, AND DIFFERENT FACTORS IN A FUTURE UPDATE //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const MissionRouter = express.Router();
+
+MissionRouter.route("/updateMissionStatus/:ID").put((req, res) => {
+  const query = "UPDATE missions SET active = '0' WHERE missions.id = ?";
+  pool.query(query, req.params.ID, (err, result) => {
+    if (err) {
+      res.status(500).send("Internal Server Error");
+    } else {
+      res.status(200).send("Mission Status Updated Successfully");
+    }
+  });
+});
 
 MissionRouter.route("/FlightsPerPlane").get((req, res) => {
   const query = "SELECT mission_data FROM missions";
@@ -53,41 +64,8 @@ MissionRouter.route("/FlightsPerPlane").get((req, res) => {
   });
 });
 
-MissionRouter.route("/")
-  .get((req, res) => {
-    const query = "SELECT mission_data FROM missions WHERE active = 0";
-    let parsedArray = [];
-
-    pool.query(query, (err, result) => {
-      if (err) {
-        res.status(500).send("Internal Server Error");
-      } else {
-        result.map((value, index) => {
-          const parsedData = JSON.parse(result[index].mission_data);
-          parsedArray.push(parsedData);
-        });
-
-        res.send(parsedArray);
-      }
-    });
-  });
-
-MissionRouter.route("/PieChart").get((req, res) => {
-  //Only do the ones for each year OR each month.
-  const query =
-    "SELECT DISTINCT COUNT(*) AS Missions FROM Missions WHERE YEAR(MissionDate) = YEAR(CURDATE())";
-
-  pool.query(query, (err, result) => {
-    if (err) {
-      res.status(500);
-    } else {
-      res.send(result).status(200);
-    }
-  });
-});
-
-MissionRouter.route("/Active").get((req, res) => {
-  const query = "SELECT mission_data, active FROM missions WHERE active = 1";
+MissionRouter.route("/").get((req, res) => {
+  const query = "SELECT mission_data FROM missions WHERE active = 0";
   let parsedArray = [];
 
   pool.query(query, (err, result) => {
@@ -104,12 +82,46 @@ MissionRouter.route("/Active").get((req, res) => {
   });
 });
 
+MissionRouter.route("/PieChart").get((req, res) => {
+  //Only do the ones for each year OR each month.
+  const query =
+    "SELECT DISTINCT COUNT(*) AS Missions FROM Missions WHERE YEAR(MissionDate) = YEAR(CURDATE())";
+
+  pool.query(query, (err, result) => {
+    if (err) {
+      res.status(500);
+    } else {
+      res.send(result).status(200);
+    }
+  });
+});
+
+MissionRouter.route("/Active").get((req, res) => {
+  const query = "SELECT id, mission_data FROM missions WHERE active = 1";
+  let parsedArray = [];
+
+  pool.query(query, (err, result) => {
+    if (err) {
+      res.status(500).send("Internal Server Error");
+    } else {
+      // Use forEach to iterate through the result
+      result.forEach((row) => {
+        const parsedData = JSON.parse(row.mission_data);
+        parsedArray.push({ id: row.id, parsedData, active: row.active });
+      });
+
+      res.send(parsedArray);
+    }
+  });
+});
+
 MissionRouter.route("/NewMission").post((req, res) => {
   const query = `INSERT INTO missions(mission_data) VALUES (?)`;
 
   pool.query(query, req.body.data, (err, result) => {
     if (err) {
-      res.status(500);
+      console.log(err);
+      res.status(500).send(err);
     } else {
       res.status(200).send({ message: "Insert Success" });
     }

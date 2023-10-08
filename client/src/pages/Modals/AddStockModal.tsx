@@ -10,6 +10,7 @@ import {
   CreateMission,
   CreateMissionButton,
   DynamicaDropDownComp,
+  EditMissionStatusButton,
 } from "../../components/content/Input_components";
 import Button from "@mui/material/Button";
 import Select from "@mui/material/Select";
@@ -31,6 +32,8 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import InputAdornment from "@mui/material/InputAdornment";
 import { useField } from "@mui/x-date-pickers/internals";
 import { MissionSummaryToggleList } from "../Missions/MissionsLists";
+import { domainToASCII } from "url";
+import { AutoFixHighOutlined, DataUsage } from "@mui/icons-material";
 
 const Wrapper = styled.div`
   background-color: red;
@@ -1596,6 +1599,245 @@ export function EditDrugModal({ open, onClose, data }) {
     document.getElementById("portal")
   );
 }
+export function EditMedicalEquipmentStockModal({ open, onClose, data }) {
+  const [loading, setLoading] = useState(false);
+  const [openSnackBar, setSnackBar] = useState(false);
+  const [errorInserting, setErrorInserting] = useState(false);
+  const [renderForm, setRenderForm] = useState(true);
+  const [renderCheck, setRenderCheck] = useState(false);
+  const [reloadPage, setReloadPage] = useState(false);
+
+  const [values, setValues] = useState({
+    product_name: data.product_name,
+    quantity: data.quantity,
+    date:
+      data.FormatedDate == null
+        ? dayjs(data.FormatedDate).format("YYYY-MM-DD")
+        : dayjs(data.FormatedDate).format("YYYY-MM-DD"),
+    location: data.location,
+  });
+
+  const delayTimeout = () => {
+    setTimeout(() => {
+      setRenderCheck(false);
+      setRenderForm(true);
+    }, 2500);
+  };
+
+  const SanitizeInputs = (name, date, quantity) => {
+    if (name.length && quantity > 0 && date != "Invalid Date") {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const insertStatus = () => {
+    return errorInserting ? (
+      <>
+        <FaIcons.FaExclamation
+          style={{
+            color: "red",
+            fontSize: "40px",
+            padding: "80px",
+            justifyContent: "center",
+            alignItems: "center",
+            paddingRight: "15px",
+          }}
+        />
+        <StyledSuccessMessage messageColor={"error"}>
+          {data.product_name} Could Not Be Updated
+        </StyledSuccessMessage>
+      </>
+    ) : (
+      <>
+        <FaIcons.FaCheck
+          style={{
+            color: "green",
+            fontSize: "40px",
+            padding: "80px",
+            justifyContent: "center",
+            alignItems: "center",
+            paddingRight: "15px",
+          }}
+        />
+        <StyledSuccessMessage messageColor={"Success"}>
+          {data.product_name} has been updated.
+        </StyledSuccessMessage>
+      </>
+    );
+  };
+
+  const handleClose = () => {
+    setSnackBar(!openSnackBar);
+  };
+
+  function handleSubmit() {
+    if (SanitizeInputs(values.product_name, values.date, values.quantity)) {
+      setRenderForm(false);
+      setLoading(true);
+      axios
+        .put(
+          `http://localhost:3331/MedicalEquipmentStock/EditItems/${data.product_id}`,
+          {
+            data: [
+              values.product_name,
+              values.quantity,
+              values.date,
+              values.location,
+            ],
+          }
+        )
+        .then((suc) => {
+          setReloadPage(true);
+          setTimeout(() => {
+            setLoading(false);
+            setRenderCheck(true);
+            delayTimeout();
+          }, 1000);
+        })
+        .catch((e) => {
+          setErrorInserting(true);
+          setTimeout(() => {
+            setErrorInserting(false);
+          }, 5000);
+          setErrorInserting(true);
+        });
+    } else {
+      alert("Please Fill Out All Fields ");
+    }
+  }
+
+  if (!open) return null;
+  return ReactDOM.createPortal(
+    <ModalWrapper>
+      <ModalContent>
+        {loading ? (
+          <>
+            {renderHeader({
+              title: "Edit",
+              closeFunc: onClose,
+              reloadState: reloadPage,
+            })}
+            <AddGrid>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: "80px",
+                }}
+              >
+                <CircularProgress value={loading} />
+              </Box>
+            </AddGrid>
+          </>
+        ) : (
+          <>
+            {renderForm && (
+              <>
+                {renderHeader({
+                  title: "Edit",
+                  closeFunc: onClose,
+                  reloadState: reloadPage,
+                })}
+                <AddGrid>
+                  <AddContentGrid
+                    style={{ gridTemplateRows: "1fr 1fr 1fr", width: "300px" }}
+                  >
+                    <FormControl
+                      variant="standard"
+                      sx={{ m: 1, minWidth: 120 }}
+                      fullWidth={true}
+                    >
+                      <TextField
+                        label="Product Name"
+                        variant="standard"
+                        value={values.product_name}
+                        fullWidth={true}
+                        style={{ paddingBottom: "15px" }}
+                        onChange={(e) => {
+                          // Spread operator used to keep the previous values in the object the same.
+                          setValues({
+                            ...data,
+                            product_name: e.target.value,
+                          });
+                        }}
+                      />
+                      <TextField
+                        label="Quantity "
+                        variant="standard"
+                        type={"number"}
+                        value={values.quantity}
+                        fullWidth={true}
+                        style={{ paddingBottom: "19px" }}
+                        onChange={(e) => {
+                          // Spread operator used to keep the previous values in the object the same.
+                          setValues({
+                            ...data,
+                            quantity: e.target.value,
+                          });
+                        }}
+                      />
+                      <TextField
+                        label="Location"
+                        variant="standard"
+                        fullWidth={true}
+                        value={values.location}
+                        style={{ paddingBottom: "10px" }}
+                        onChange={(e) => {
+                          // Spread operator used to keep the previous values in the object the same.
+                          setValues({
+                            ...values,
+                            location: e.target.value,
+                          });
+                        }}
+                      />
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                          label="Expiry Date"
+                          value={dayjs(values.date)}
+                          onChange={(date) => {
+                            setValues({
+                              ...values,
+                              date: dayjs(date).format("YYYY-MM-DD"), // Format the selected date
+                            });
+                          }}
+                          sx={{ width: "100%", marginTop: "19px" }}
+                        />
+                      </LocalizationProvider>
+                    </FormControl>
+
+                    <Button
+                      variant="contained"
+                      fullWidth={true}
+                      onClick={() => {
+                        handleSubmit();
+                      }}
+                    >
+                      submit
+                    </Button>
+                  </AddContentGrid>
+                </AddGrid>
+              </>
+            )}
+            {renderCheck && (
+              <>
+                {renderHeader({
+                  title: "Edit",
+                  closeFunc: onClose,
+                  reloadState: reloadPage,
+                })}
+                <AddGrid>{insertStatus()}</AddGrid>
+              </>
+            )}
+          </>
+        )}
+      </ModalContent>
+    </ModalWrapper>,
+    document.getElementById("portal")
+  );
+}
 
 export function EditOrderModal({ open, onClose, data, route, orderId }) {
   const [loading, setLoading] = useState(false);
@@ -1940,7 +2182,6 @@ const missionDataContext = createContext({
 export function ViewMissionModal({ open, onClose, data }) {
   const [loading, setLoading] = useState(false);
   const [openSnackBar, setSnackBar] = useState(false);
-  const [errorInserting, setErrorInserting] = useState(false);
   const [renderForm, setRenderForm] = useState(true);
   const [renderCheck, setRenderCheck] = useState(false);
   const [progressCounter, setProgressCounter] = useState(0);
@@ -1963,13 +2204,6 @@ export function ViewMissionModal({ open, onClose, data }) {
     value: 0,
   });
 
-  const delayTimeout = () => {
-    setTimeout(() => {
-      setRenderCheck(false);
-      setRenderForm(true);
-    }, 2500);
-  };
-
   const SanitizeInputs = (type, value) => {
     if (type != " " && value > 0) {
       return true;
@@ -1978,61 +2212,25 @@ export function ViewMissionModal({ open, onClose, data }) {
     }
   };
 
-  const insertStatus = () => {
-    return errorInserting ? (
-      <>
-        <FaIcons.FaExclamation
-          style={{
-            color: "red",
-            fontSize: "40px",
-            padding: "80px",
-            justifyContent: "center",
-            alignItems: "center",
-            paddingRight: "15px",
-          }}
-        />
-        <StyledSuccessMessage messageColor={"error"}>
-          {data.product_name} Could Not Be Updated
-        </StyledSuccessMessage>
-      </>
-    ) : (
-      <>
-        <FaIcons.FaCheck
-          style={{
-            color: "green",
-            fontSize: "40px",
-            padding: "80px",
-            justifyContent: "center",
-            alignItems: "center",
-            paddingRight: "15px",
-          }}
-        />
-        <StyledSuccessMessage messageColor={"Success"}>
-          {data.product_name} has been updated.
-        </StyledSuccessMessage>
-      </>
-    );
-  };
-
   const handleClose = () => {
     setSnackBar(!openSnackBar);
   };
 
   const checkEntryOfFields = (counter) => {
-    if (
-      missionState.drugs.length > 0 &&
-      missionState.equipment.length > 0 &&
-      missionState.personele.length > 0 &&
-      missionState.flightInfo.arrival !== " " &&
-      missionState.flightInfo.departure !== " " &&
-      missionState.flightInfo.flightNumber !== " " &&
-      missionState.flightInfo.plane !== " "
-    ) {
-      return <MissionSummaryPage page={counter} />;
-    } else {
-      setProgressCounter(0);
-      alert("Please Complete All fields");
-    }
+    // if (
+    //   missionState.drugs.length > 0 &&
+    //   missionState.equipment.length > 0 &&
+    //   missionState.personele.length > 0 &&
+    //   missionState.flightInfo.arrival !== " " &&
+    //   missionState.flightInfo.departure !== " " &&
+    //   missionState.flightInfo.flightNumber !== " " &&
+    //   missionState.flightInfo.plane !== " "
+    // ) {
+    return <MissionSummaryPage page={counter} />;
+    // } else {
+    //   setProgressCounter(0);
+    //   alert("Please Complete All fields");
+    // }
   };
 
   const renderPages = (counter) => {
@@ -2111,82 +2309,44 @@ export function ViewMissionModal({ open, onClose, data }) {
             </StyledProgressItems>
           </StyledProgressBarWrapper>
           <ModalContent>
-            {loading ? (
-              <>
-                {renderMissionsHeader({
-                  title: `New MedicVac Mission`,
-                  closeFunc: onClose,
-                  // reloadState: reloadPage,
-                })}
-                <AddGrid style={{ height: "500px" }}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: "80px",
-                    }}
-                  >
-                    <CircularProgress value={loading} />
-                  </Box>
-                </AddGrid>
-              </>
-            ) : (
-              <>
-                {renderForm && (
-                  <>
-                    {renderMissionsHeader({
-                      title: `New MedicVac Mission`,
-                      closeFunc: onClose,
-                      // reloadState: reloadPage,
-                    })}
-                    <AddGrid>
-                      <AddContentGrid
-                        style={{
-                          gridTemplateRows: "1fr 1fr 1fr",
-                          height: "500px",
-                          width: "400px",
-                        }}
-                      >
-                        {renderPages(progressCounter)}
-                      </AddContentGrid>
-                    </AddGrid>
-                    <StyledButtonsWrapper>
-                      <StyledBackButton
-                        onClick={() =>
-                          progressCounter > 0
-                            ? setProgressCounter(progressCounter - 1)
-                            : null
-                        }
-                        position={progressCounter}
-                      >
-                        <FaIcons.FaArrowLeft style={{ padding: "10px" }} />
-                      </StyledBackButton>
-                      <StyledForthButton
-                        onClick={() =>
-                          progressCounter < 4
-                            ? setProgressCounter(progressCounter + 1)
-                            : null
-                        }
-                        position={progressCounter}
-                      >
-                        <FaIcons.FaArrowRight style={{ padding: "10px" }} />
-                      </StyledForthButton>
-                    </StyledButtonsWrapper>
-                  </>
-                )}
-                {renderCheck && (
-                  <>
-                    {renderMissionsHeader({
-                      title: `Edit`,
-                      closeFunc: onClose,
-                      // reloadState: reloadPage,
-                    })}
-                    <AddGrid>{insertStatus()}</AddGrid>
-                  </>
-                )}
-              </>
-            )}
+            {renderMissionsHeader({
+              title: `New MedicVac Mission`,
+              closeFunc: onClose,
+              // reloadState: reloadPage,
+            })}
+            <AddGrid>
+              <AddContentGrid
+                style={{
+                  gridTemplateRows: "1fr 1fr 1fr",
+                  height: "500px",
+                  width: "400px",
+                }}
+              >
+                {renderPages(progressCounter)}
+              </AddContentGrid>
+            </AddGrid>
+            <StyledButtonsWrapper>
+              <StyledBackButton
+                onClick={() =>
+                  progressCounter > 0
+                    ? setProgressCounter(progressCounter - 1)
+                    : null
+                }
+                position={progressCounter}
+              >
+                <FaIcons.FaArrowLeft style={{ padding: "10px" }} />
+              </StyledBackButton>
+              <StyledForthButton
+                onClick={() =>
+                  progressCounter < 4
+                    ? setProgressCounter(progressCounter + 1)
+                    : null
+                }
+                position={progressCounter}
+              >
+                <FaIcons.FaArrowRight style={{ padding: "10px" }} />
+              </StyledForthButton>
+            </StyledButtonsWrapper>
           </ModalContent>
         </ModalWrapper>
       </missionDataContext.Provider>
@@ -2825,6 +2985,44 @@ function MissionSummaryPage(page) {
   const { missionState, setMissionState } =
     React.useContext(missionDataContext);
 
+  const MedicalEquipmentExits = (equipment, flightInfo) => {
+    if (equipment.length != 0) {
+      equipment.forEach((value, index) => {
+        axios
+          .put(
+            `http://localhost:3331/MedicalEquipmentStock/StockUpdateMission/${value.ID}`,
+            {
+              quantity: value.qty,
+              flightNumber: flightInfo.flightNumber,
+            }
+          )
+          .then((result) => {})
+          .catch((e) => {});
+      });
+    } else {
+      return;
+    }
+  };
+
+  const DrugExits = (drug, flightInfo) => {
+    if (drug.length != 0) {
+      drug.forEach((value, index) => {
+        axios
+          .put(
+            `http://localhost:3331/Med_stock/StockUpdateMission/${value.ID}`,
+            {
+              quantity: value.qty,
+              flightNumber: flightInfo.flightNumber,
+            }
+          )
+          .then((result) => {})
+          .catch((e) => {});
+      });
+    } else {
+      return;
+    }
+  };
+
   const handleSubmit = () => {
     setLoading(true);
     const stringifiedData = JSON.stringify(missionState);
@@ -2833,6 +3031,8 @@ function MissionSummaryPage(page) {
         data: stringifiedData,
       })
       .then((result) => {
+        DrugExits(missionState.drugs, missionState.flightInfo);
+        MedicalEquipmentExits(missionState.equipment, missionState.flightInfo);
         setTimeout(() => {
           setLoading(false);
           setStatusSuccess(true);
@@ -2843,12 +3043,13 @@ function MissionSummaryPage(page) {
         }, 2000);
       })
       .catch((e) => {
+        console.log("OUr erro is here" + e);
         setTimeout(() => {
           setLoading(false);
           setStatusError(true);
           setTimeout(() => {
             setStatusError(false);
-            location.reload();
+            // location.reload();
           }, 3000);
         }, 2000);
       });
@@ -2948,5 +3149,283 @@ function MissionSummaryPage(page) {
     </StyledLoadingBox>
   ) : (
     renderStatusPage()
+  );
+}
+
+export function ViewMissionModalSummary({
+  data,
+  openModal,
+  onClose,
+  id,
+  active,
+}) {
+  const [loading, setLoading] = useState(false);
+  const [statusSuccess, setStatusSuccess] = useState(false);
+  const [statusError, setStatusError] = useState(false);
+
+  const changeMissionStatus = (id) => {
+    setLoading(true);
+    axios
+      .put(`http://localhost:3331/missions/updateMissionStatus/${id}`)
+      .then((result) => {
+        setTimeout(() => {
+          setLoading(false);
+          setStatusSuccess(true);
+          setTimeout(() => {
+            setStatusSuccess(false);
+            location.reload();
+          }, 3000);
+        }, 2000);
+      })
+      .catch((e) => {
+        setTimeout(() => {
+          setLoading(false);
+          setStatusError(true);
+          setTimeout(() => {
+            setStatusError(false);
+            location.reload();
+          }, 3000);
+        }, 2000);
+      });
+  };
+
+  const renderPages = () => {
+    return statusError ? (
+      <>
+        <StyledStatusMessage messageColor={"error"}>
+          <FaIcons.FaExclamation
+            style={{
+              color: "red",
+              fontSize: "40px",
+              paddingBottom: "35px",
+            }}
+          />
+          There Was An Error Changing the status, please try again later. If
+          this error persists, contact admin for help
+        </StyledStatusMessage>
+      </>
+    ) : statusSuccess ? (
+      <>
+        <StyledStatusMessage messageColor={"Success"}>
+          <FaIcons.FaCheck
+            style={{
+              color: "green",
+              fontSize: "40px",
+              paddingBottom: "10px",
+            }}
+          />
+          {data.flightInfo.flightNumber}' Status Has Been Changed.
+        </StyledStatusMessage>
+      </>
+    ) : (
+      <>
+        <StyledFlightDetailsSummary>
+          <StyledSubSectionHeader>Flight Details</StyledSubSectionHeader>
+          <StyledGreyLine
+            style={{
+              width: "100%",
+              marginBottom: "15px",
+              marginTop: "5px",
+            }}
+          />
+          <StyledInfoMissionSummary>
+            Flight NO:
+            <span style={{ color: "#575757", paddingLeft: "4px" }}>
+              {data.flightInfo.flightNumber}
+            </span>
+          </StyledInfoMissionSummary>
+          <StyledInfoMissionSummary>
+            Plane:{" "}
+            <span style={{ color: "#575757", paddingLeft: "4px" }}>
+              {data.flightInfo.plane}
+            </span>
+          </StyledInfoMissionSummary>
+          <StyledInfoMissionSummary style={{ paddingBottom: "0px" }}>
+            <span style={{ color: "#575757" }}>
+              {" "}
+              {data.flightInfo.departure}
+            </span>
+            <StyledArrow>
+              {" "}
+              <FaIcons.FaArrowRight />
+            </StyledArrow>
+            <span style={{ color: "#575757" }}>{data.flightInfo.arrival}</span>
+            <span style={{ color: "#575757", paddingLeft: "10px" }}>
+              ({data.flightInfo.date})
+            </span>
+          </StyledInfoMissionSummary>
+          <StyledGreyLine
+            style={{
+              width: "100%",
+              marginBottom: "0px",
+              marginTop: "15px",
+            }}
+          />
+        </StyledFlightDetailsSummary>
+        <StyledFlightDetailsSummary>
+          <MissionSummaryToggleList data={data}></MissionSummaryToggleList>
+          <StyledGreyLine
+            style={{
+              width: "100%",
+              marginBottom: "5px",
+              marginTop: "20px",
+            }}
+          />
+          <StyledSubSectionHeader style={{ paddingTop: "15px" }}>
+            {" "}
+            Additional Notes
+          </StyledSubSectionHeader>
+          <StyledGreyLine
+            style={{
+              width: "100%",
+              marginBottom: "10px",
+              marginTop: "6px",
+            }}
+          />
+          <StyledNotesBox>{data.flightInfo.notes}</StyledNotesBox>
+        </StyledFlightDetailsSummary>
+      </>
+    );
+  };
+
+  if (!openModal) return null;
+  return ReactDOM.createPortal(
+    <>
+      <ModalWrapper>
+        <ModalContent>
+          {renderMissionsHeader({
+            title: `Medivac Summary`,
+            closeFunc: onClose,
+            // reloadState: reloadPage,
+          })}
+          <AddGrid>
+            <AddContentGrid
+              style={{
+                gridTemplateRows: "1fr 1fr 1fr",
+                height: "500px",
+                width: "400px",
+              }}
+            >
+              {loading ? (
+                <StyledLoadingBox>
+                  <CircularProgress value={loading} />
+                </StyledLoadingBox>
+              ) : (
+                renderPages()
+              )}
+            </AddContentGrid>
+          </AddGrid>
+          {!loading && !statusSuccess && !statusError && (
+            <EditMissionStatusButton
+              onClickFunc={() => changeMissionStatus(id)}
+            />
+          )}
+        </ModalContent>
+      </ModalWrapper>
+    </>,
+    document.getElementById("portal")
+  );
+}
+
+export function ViewPastMissionModalSummary({
+  data,
+  openModal,
+  onClose,
+  id,
+  active,
+}) {
+  if (!openModal) return null;
+  return ReactDOM.createPortal(
+    <>
+      <ModalWrapper>
+        <ModalContent>
+          {renderMissionsHeader({
+            title: `Medivac Summary`,
+            closeFunc: onClose,
+            // reloadState: reloadPage,
+          })}
+          <AddGrid>
+            <AddContentGrid
+              style={{
+                gridTemplateRows: "1fr 1fr 1fr",
+                height: "500px",
+                width: "400px",
+              }}
+            >
+              <StyledFlightDetailsSummary>
+                <StyledSubSectionHeader>Flight Details</StyledSubSectionHeader>
+                <StyledGreyLine
+                  style={{
+                    width: "100%",
+                    marginBottom: "15px",
+                    marginTop: "5px",
+                  }}
+                />
+                <StyledInfoMissionSummary>
+                  Flight NO:
+                  <span style={{ color: "#575757", paddingLeft: "4px" }}>
+                    {data.flightInfo.flightNumber}
+                  </span>
+                </StyledInfoMissionSummary>
+                <StyledInfoMissionSummary>
+                  Plane:{" "}
+                  <span style={{ color: "#575757", paddingLeft: "4px" }}>
+                    {data.flightInfo.plane}
+                  </span>
+                </StyledInfoMissionSummary>
+                <StyledInfoMissionSummary style={{ paddingBottom: "0px" }}>
+                  <span style={{ color: "#575757" }}>
+                    {" "}
+                    {data.flightInfo.departure}
+                  </span>
+                  <StyledArrow>
+                    {" "}
+                    <FaIcons.FaArrowRight />
+                  </StyledArrow>
+                  <span style={{ color: "#575757" }}>
+                    {data.flightInfo.arrival}
+                  </span>
+                  <span style={{ color: "#575757", paddingLeft: "10px" }}>
+                    ({data.flightInfo.date})
+                  </span>
+                </StyledInfoMissionSummary>
+                <StyledGreyLine
+                  style={{
+                    width: "100%",
+                    marginBottom: "0px",
+                    marginTop: "15px",
+                  }}
+                />
+              </StyledFlightDetailsSummary>
+              <StyledFlightDetailsSummary>
+                <MissionSummaryToggleList
+                  data={data}
+                ></MissionSummaryToggleList>
+                <StyledGreyLine
+                  style={{
+                    width: "100%",
+                    marginBottom: "5px",
+                    marginTop: "20px",
+                  }}
+                />
+                <StyledSubSectionHeader style={{ paddingTop: "15px" }}>
+                  {" "}
+                  Additional Notes
+                </StyledSubSectionHeader>
+                <StyledGreyLine
+                  style={{
+                    width: "100%",
+                    marginBottom: "10px",
+                    marginTop: "6px",
+                  }}
+                />
+                <StyledNotesBox>{data.flightInfo.notes}</StyledNotesBox>
+              </StyledFlightDetailsSummary>
+            </AddContentGrid>
+          </AddGrid>
+        </ModalContent>
+      </ModalWrapper>
+    </>,
+    document.getElementById("portal")
   );
 }

@@ -12,9 +12,11 @@ const Selectbox = styled.div`
   grid-column: 1/5;
 `;
 const Styledselect = styled.select`
-  color: #585858;
-  border: 0.5px solid #b7b7b7;
-  border-radius: 2px;
+  color: #808080;
+  border: 1px solid rgba(207, 207, 207, 0.482);
+  background-color: #f4f4f446;
+  /* border-left: 0px; */
+  /* border-radius: 2px; */
   height: 40px;
   max-width: 17em;
   transition: background-color 0.2s ease-in-out;
@@ -206,14 +208,9 @@ export function FilterDropDownComp({ row, col, arr, placeholderprop }) {
           <Styledselect
             name="product"
             onChange={(e) => dropdownVal(e.target.value)}
-            style={{
-              borderTopRightRadius: "5px",
-              borderBottomRightRadius: "5px",
-              borderBottomLeftRadius: "5px",
-              borderTopLeftRadius: "5px",
-            }}
+            style={{}}
           >
-            <option value="" disabled selected>
+            <option value="" disabled selected style={{ color: "#808080" }}>
               Filter By
             </option>
             {arr.map((data, index) => (
@@ -603,24 +600,27 @@ const StyledAddStock = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
+  color: #808080;
   /* width: 80px; */
 
   margin-right: 8px;
   border: 1px solid #cfcfcf7b;
-  border-radius: 25px;
-  background-image: linear-gradient(to right, #0080ff, #095df0);
+  border-radius: 3px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-left: 0px;
+
+  background-color: #f4f4f446;
   transition: background-color 0.2s ease-in-out;
-  transition: box-shadow 0.2s ease-in-out;
   cursor: pointer;
 
   &:hover {
-    background-color: #12589d;
-    box-shadow: 0 0 5px rgba(0, 98, 255, 0.49);
+    color: black;
+    background-color: #f2f2f2c7;
   }
 
   &:active {
-    background-color: #1d8af6;
+    background-color: #e8e8e8;
   }
 `;
 
@@ -632,7 +632,10 @@ export function AddToStock({ portalFunc, onClose }) {
           portalFunc();
         }}
       >
-        <FaIcons.FaPlus style={{ color: "#ffffff" }} />
+        Add To Stock
+        <FaIcons.FaPlus
+          style={{ color: "rgb(153, 153, 153)", paddingLeft: "5px" }}
+        />
       </StyledAddStock>
     </>
   );
@@ -688,10 +691,27 @@ export function CreateMission({ onClickFunc }) {
         onClick={() => onClickFunc()}
         style={{
           padding: "10px",
-          width: "100%" 
+          width: "100%",
         }}
       >
         Submit Mission
+      </MissionButtonWrap>
+    </>
+  );
+}
+export function EditMissionStatusButton({ onClickFunc }) {
+  return (
+    <>
+      <MissionButtonWrap
+        onClick={() => onClickFunc()}
+        style={{
+          margin: "0px",
+          width: "100%",
+          height: "50px",
+          fontSize: "15px",
+        }}
+      >
+        Change Status To Complete
       </MissionButtonWrap>
     </>
   );
@@ -700,8 +720,7 @@ export function CreateMission({ onClickFunc }) {
 const styledModalTextBoxes = styled.input``;
 
 export function modalTextBoxes({ title }) {
-  return <>
-  </>
+  return <></>;
 }
 
 export function AddItemListButton({ onClickFunc }) {

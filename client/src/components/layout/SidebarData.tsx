@@ -58,7 +58,7 @@ export const MedicalSidebarData = [
     index: 0, // Add the index property to identify the item
     Submenu: [
       {
-        title: "View Drug Stock",
+        title: "View Drugs",
         route: "/pages/Stock/Drug_stock",
         icon: <FaIcons.FaEye />,
       },
@@ -68,8 +68,13 @@ export const MedicalSidebarData = [
         icon: <FaIcons.FaTools />,
       },
       {
-        title: "Entry/Removal History",
+        title: "Drug E/R History",
         route: "/pages/Stock/ExitEntryHistory",
+        icon: <FaIcons.FaHistory />,
+      },
+      {
+        title: "Equipment E/R History",
+        route: "/pages/Stock/ExitEntryHistoryEquipment",
         icon: <FaIcons.FaHistory />,
       },
     ],

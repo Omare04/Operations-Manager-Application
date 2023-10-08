@@ -32,6 +32,7 @@ const StyledTableContainer = styled.div`
   border-collapse: collapse;
   grid-column: 1/6;
   grid-row: 2/3;
+  border: 1px solid #aeaeae82;
 `;
 
 const StyledTable = styled.table`
@@ -54,7 +55,7 @@ const StyledTableRows = styled.tr`
   transition: background-color 0.1s ease-in-out;
   cursor: pointer;
 
-  background-color: #f0f0f0;
+  background-color: #ffffff;
 `;
 
 const StyledTableHeading = styled.th`
@@ -95,8 +96,8 @@ const StyledArrowDown = styled.div`
 `;
 
 const StyledFilterContainer = styled.div`
-  display: grid;
-  grid-template-columns: 40px 0.5fr 0.5fr 115px;
+  display: flex;
+  /* grid-template-columns: 40px 0.5fr 0.5fr 115px; */
   grid-column: 1/6;
   grid-row: 1;
   margin-bottom: 10px;
@@ -104,25 +105,18 @@ const StyledFilterContainer = styled.div`
 `;
 
 const StyledSearchBox = styled.div`
-  display: grid;
-  grid-column: 2/3;
-  grid-row: 1;
-  position: relative; /* Add position relative */
+  /* display: grid; */
+  height: 100%;
+  display: flex;
   width: 100%;
-  border-right: 1px solid #cfcfcf7b;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
+  /* border-right: 1px solid #cfcfcf7b; */
 `;
 
 const StyledSearch = styled.input`
-  grid-column: 1;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-  grid-row: 1;
   outline: none;
   border: 1px solid #cfcfcf7b;
-  border-right: 0px;
-  border-left: 0;
+  border-right: 0px; 
+  width: 100%; 
   font-size: 14.9px;
   padding-left: 15px;
   color: #434343;
@@ -168,6 +162,7 @@ const StyledSearchIconWrap = styled.div`
   border: 1px solid grey;
   border-radius: 5px;
   border-bottom-right-radius: 0px;
+  width: 80px;
   border-top-right-radius: 0px;
   border: 1px solid #a4a4a47c;
   background-color: #c8c8c853;
@@ -177,8 +172,6 @@ const StyledDropdownWrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  grid-column: 4;
-  grid-row: 1;
 `;
 
 const StyledPaginationWrap = styled.ul`
@@ -192,10 +185,8 @@ const StyledPaginationNav = styled.nav``;
 
 const StyledAddButtonWrap = styled.div`
   display: flex;
-  justify-content: flex-end;
+  /* justify-content: flex-end; */
   width: 100%;
-  grid-column: 3/4;
-  grid-row: 1/2;
 `;
 
 const StyledPaginationItems = styled.li`
@@ -455,7 +446,7 @@ export function TableStatic({ arr, headers, td, dropdown, ordertable }) {
     numOfOrders,
     render: (
       <>
-        <StyledTable style={{height: "auto"}}>
+        <StyledTable style={{ height: "auto" }}>
           <Styledtbody>
             <StyledTableRows>
               {headers.map((data) => (
