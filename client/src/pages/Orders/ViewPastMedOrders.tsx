@@ -37,7 +37,7 @@ const StyledHeader = styled.div`
   grid-column: 1/7;
   grid-row: 1;
   color: white;
-  background-image: linear-gradient(to right, #0080ff , #095df0);
+  background-image: linear-gradient(to right, #0080ff, #095df0);
   border: 1px solid #bebebe;
   height: 50px;
   border-radius: 5px;
@@ -64,7 +64,9 @@ export default function ViewPastMedOrders() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3331/Orders/PastMedOrders")
+      .get("http://localhost:3331/Orders/PastMedOrders", {
+        withCredentials: true,
+      })
       .then((result) => {
         setData(result.data);
         setLoading(false);
@@ -102,14 +104,14 @@ export default function ViewPastMedOrders() {
       {
         accessorKey: "FormattedDate",
         header: "Date Delivered",
-        size: 150
-      }
+        size: 150,
+      },
     ],
     []
   );
 
   const handlePdfExport = () => {
-    setClickState(true)
+    setClickState(true);
     const rowSelection = tableInstanceRef.current.getState().rowSelection;
     const user = [
       {
@@ -126,25 +128,30 @@ export default function ViewPastMedOrders() {
           .get(
             `http://localhost:3331/Orders/ExportMedPO/${
               Object.keys(rowSelection)[i]
-            }`
+            }`,
+            { withCredentials: true }
           )
           .then((result) => {
             axios
-              .get("http://localhost:3331/Services/generateTableRoute", {
-                params: {
-                  type: "MedicineOrder",
-                  td: result.data.payload,
-                  headers: ["Product", "Type", "Quantity"],
-                  user: user,
-                  columnWidths: [300, 200, 60],
-                  title: "AOM Air Ambulance",
+              .get(
+                "http://localhost:3331/Services/generateTableRoute",
+                {
+                  params: {
+                    type: "MedicineOrder",
+                    td: result.data.payload,
+                    headers: ["Product", "Type", "Quantity"],
+                    user: user,
+                    columnWidths: [300, 200, 60],
+                    title: "AOM Air Ambulance",
+                  },
+                  responseType: "blob",
                 },
-                responseType: "blob",
-              })
+                { withCredentials: true }
+              )
               .then((result) => {
                 downloadPdf(Object.keys(rowSelection)[i], result.data);
                 setClickMessage("Download Successful");
-                setTimeout(() => setClickState(false), 3000); 
+                setTimeout(() => setClickState(false), 3000);
               });
           })
           .catch((e) => {
@@ -153,7 +160,7 @@ export default function ViewPastMedOrders() {
       }
     } else {
       setClickMessage("Please Select An Order(s) To Export");
-      setTimeout(() => setClickState(false), 2000); 
+      setTimeout(() => setClickState(false), 2000);
     }
   };
 
@@ -167,14 +174,13 @@ export default function ViewPastMedOrders() {
     },
   });
 
-  const handleClick = () => {
-  };
+  const handleClick = () => {};
 
-  function getColor(){
-    if(clickMessage == "Please Select An Order(s) To Export"){
-      return "red"
-    }else{
-      return "green"
+  function getColor() {
+    if (clickMessage == "Please Select An Order(s) To Export") {
+      return "red";
+    } else {
+      return "green";
     }
   }
 
@@ -184,7 +190,7 @@ export default function ViewPastMedOrders() {
     border: "1px solid #e8e8e8",
     p: 1,
     bgcolor: "#f4f4f4",
-    color: getColor()
+    color: getColor(),
   };
 
   return (

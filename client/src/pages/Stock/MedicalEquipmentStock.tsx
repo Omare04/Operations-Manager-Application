@@ -92,7 +92,7 @@ function MedicalEquipmentStock() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("http://localhost:3331/MedicalEquipmentStock/getAllItems")
+      .get("http://localhost:3331/MedicalEquipmentStock/getAllItems", {withCredentials: true})
       .then((result) => {
         setData(result.data);
         setLoading(false);
@@ -144,7 +144,7 @@ function MedicalEquipmentStock() {
 
     if (confirm) {
       axios
-        .delete(`http://localhost:3331/MedicalEquipmentStock/${productId}`)
+        .delete(`http://localhost:3331/MedicalEquipmentStock/${productId}`,{withCredentials: true})
         .then((result) => {
           alert(`${productName} has been removed from the stock`);
           setTimeout(() => {

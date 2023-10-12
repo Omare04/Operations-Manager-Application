@@ -5,6 +5,11 @@ import fs from "fs";
 import axios from "axios";
 import { reject } from "bcrypt/promises.js";
 import { rejects } from "assert";
+import { userAuthMiddleWare } from "./users.js";
+import cors from "cors";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
 
 const dbport = 3301;
 const dbhost = "localhost";
@@ -23,6 +28,45 @@ const pool = mysql.createPool({
 export const MedOrder = express.Router();
 export const DrugOrder = express.Router();
 export const PartOrder = express.Router();
+
+MedOrder.use(cookieParser());
+MedOrder.use(userAuthMiddleWare);
+MedOrder.use(bodyParser.urlencoded({ extended: true }));
+dotenv.config();
+MedOrder.use(bodyParser.json());
+MedOrder.use(
+  cors({
+    origin: "http://localhost:5173",
+    method: ["GET", "POST", "PUT"],
+    credentials: true,
+  })
+);
+
+DrugOrder.use(cookieParser());
+DrugOrder.use(userAuthMiddleWare);
+DrugOrder.use(bodyParser.urlencoded({ extended: true }));
+dotenv.config();
+DrugOrder.use(bodyParser.json());
+DrugOrder.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+    credentials: true,
+  })
+);
+
+PartOrder.use(cookieParser());
+PartOrder.use(userAuthMiddleWare);
+PartOrder.use(bodyParser.urlencoded({ extended: true }));
+dotenv.config();
+PartOrder.use(bodyParser.json());
+PartOrder.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+    credentials: true,
+  })
+);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

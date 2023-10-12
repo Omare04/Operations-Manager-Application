@@ -76,7 +76,7 @@ function Missions() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3331/Planes")
+      .get("http://localhost:3331/Planes",{withCredentials: true})
       .then((result) => {
         setData(result.data);
         setLoading(false);
@@ -243,7 +243,7 @@ const StyledPastMissionsBox = styled.div`
 
 function PastMissionBoxes() {
   useEffect(() => {
-    axios.get("http://localhost:3331/missions").then((result) => {});
+    axios.get("http://localhost:3331/missions", {withCredentials: true}).then((result) => {});
   }, []);
   return (
     <>

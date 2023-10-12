@@ -130,7 +130,7 @@ export function Medlistdata({
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3331/Med_stock/DateEntered/${Product_ID}`)
+      .get(`http://localhost:3331/Med_stock/DateEntered/${Product_ID}`, {withCredentials: true})
       .then((result) => {
         if (result.data == []) {
         } else {
@@ -152,7 +152,7 @@ export function Medlistdata({
     axios
       .delete(`http://localhost:3331/Med_stock/DeleteItem/${id}`, {
         params: { productName: Product_name },
-      })
+      }, {withCredentials: true})
       .then((result) => {
         alert(result.data.message);
         location.reload();

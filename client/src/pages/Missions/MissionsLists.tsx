@@ -27,7 +27,7 @@ const StyledTableWrapper = styled.div`
 
 const StyledTable = styled.table`
   width: 100%;
-  height: 270px;
+  max-height: 270px;
   background-color: #dadada;
   overflow: auto;
   border-spacing: 0px;
@@ -81,7 +81,7 @@ const TableWrap = styled.div`
 
 const StyledNoTableItemsMessage = styled.div`
   color: #a9a9a9;
-  font-style: italic; 
+  font-style: italic;
   display: flex;
   align-items: center;
   font-size: 30px;
@@ -104,7 +104,7 @@ export function ActiveMissionList() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3331/Missions/Active")
+      .get("http://localhost:3331/Missions/Active", { withCredentials: true })
       .then((result) => {
         setData(result.data);
       })
@@ -166,7 +166,7 @@ export function PastMissionsList() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3331/Missions")
+      .get("http://localhost:3331/Missions", { withCredentials: true })
       .then((result) => {
         setLoading(!loading);
         setData(result.data);

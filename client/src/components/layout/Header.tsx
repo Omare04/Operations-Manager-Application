@@ -7,8 +7,9 @@ import { LoginReducer } from "../../Hooks/Reducers";
 import { SignIn } from "../../pages/Registration/sign_in";
 import { LoginContext } from "../../Helper/userContext";
 import axios from "axios";
-import Cookies from 'universal-cookie'
-import {useCookies} from 'react-cookie'
+import Cookies from "universal-cookie";
+import { useCookies } from "react-cookie";
+import { AuthContext } from "../../Helper/authWrapper";
 
 const Grid = styled.div`
   display: grid;
@@ -63,15 +64,15 @@ const StyledTitle = styled.p`
   font-size: 19px;
   color: white;
   transition: color 0.3s ease;
-  
+
   &:hover {
     color: #cecece;
   }
-  
+
   @media screen and (min-width: 280px) and (max-width: 500px) {
     display: none;
   }
-  `;
+`;
 
 const StyledLogout = styled.a`
   cursor: pointer;
@@ -87,40 +88,32 @@ const StyledLogout = styled.a`
 
 // const { Logout, CheckLogin} = useAuthWrapper();
 function Header({ toggle, sidebar }) {
-
-  
-  const userSession = useContext(LoginContext);
   const [cookie, setCookie] = useState("");
-  const [cookies, removeCookie] = useCookies(['userSession']);
-  
-  const nav = useNavigate(); 
-  
+  const [cookies, removeCookie] = useCookies(["userSession"]);
+
+  const nav = useNavigate();
+
   useEffect(() => {
     const cookies = new Cookies();
     setCookie(cookies.get("userSession"));
   }, []);
-  
+
+  const { logout } = useContext(AuthContext);
+
   const LogoutHandler = () => {
-    
-    nav("/pages/Registration/sign_in");
-    // Remove the cookie
-    removeCookie('userSession',{});
     axios
-      .delete("http://localhost:3331/users/logout", {
-        params: {token: cookie },
-      })
+      .delete("http://localhost:3331/users/logout", { withCredentials: true })
       .then((response) => {
-        const { loggedIn } = response.data;
-        if (loggedIn === false) {
-        }
+        console.log(response);
+        logout(response.data.loggedIn);
       })
       .catch((error) => {
+        console.log(error);
         // Handle any error that occurs during the request
       });
-      location.reload();
-    };
+    location.reload();
+  };
 
-    
   return (
     <>
       <Grid>
@@ -135,8 +128,8 @@ function Header({ toggle, sidebar }) {
             <StyledTitle>Air Ocean Maroc</StyledTitle>{" "}
           </Link>
         </div>
-        <StyledLoginfo sidebar={sidebar}> 
-        <StyledLogout onClick={LogoutHandler}>Logout</StyledLogout>
+        <StyledLoginfo sidebar={sidebar}>
+          <StyledLogout onClick={LogoutHandler}>Logout</StyledLogout>
         </StyledLoginfo>
       </Grid>
     </>

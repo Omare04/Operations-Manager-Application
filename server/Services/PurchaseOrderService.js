@@ -9,7 +9,7 @@ const pdfRoute = express.Router();
 function getUser(id) {
   return new Promise((resolve, reject) => {
     axios
-      .get(`http://localhost:3331/users/${id.uid}`)
+      .get(`http://localhost:3331/users/${id.uid}`, { withCredentials: true })
       .then((response) => {
         return resolve(response);
       })
@@ -52,7 +52,7 @@ pdfRoute.route("/").get((req, res) => {
 });
 
 pdfRoute.route("/ExportTables").get((req, res) => {
-  const { td, th, title, reference } = req.query; 
+  const { td, th, title, reference } = req.query;
 
   const doc = createExportPdf(td, th, title, reference);
 
@@ -65,7 +65,7 @@ pdfRoute.route("/ExportTables").get((req, res) => {
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
       "Content-Disposition",
-      `attachment; filename=${reference}.pdf` 
+      `attachment; filename=${reference}.pdf`
     );
 
     // Send the PDF buffer as the response
@@ -136,10 +136,7 @@ export function generateCustomerInformation(type, doc, info, po, Supplier) {
 
     const customerInformationTop = 200;
 
-    if (
-      Supplier.address != undefined &&
-      Supplier.address.length > 50 
-    ) {
+    if (Supplier.address != undefined && Supplier.address.length > 50) {
       doc
         .fontSize(10)
         .text("Email: ", 50, customerInformationTop)
@@ -279,7 +276,7 @@ function generatePOTable(doc, po, type) {
     doc.font("Helvetica");
 
     let index = 0;
-    let currentPage = 1; 
+    let currentPage = 1;
     let invoiceTable = true;
     let position = 0;
 
@@ -362,7 +359,7 @@ function generateTableRow(doc, y, items, isHeader) {
     }
   } else {
     doc.font("Helvetica");
-    const columnWidths = [200, 100, 65, 50, 50]; 
+    const columnWidths = [200, 100, 65, 50, 50];
     let position = 50;
 
     for (let i = 0; i < items.length; i++) {
@@ -388,9 +385,7 @@ function generateTableRow(doc, y, items, isHeader) {
       position += columnWidths[i];
     }
   }
-
 }
-
 
 function generateHr(doc, y) {
   doc.strokeColor("#aaaaaa").lineWidth(1).moveTo(50, y).lineTo(550, y).stroke();

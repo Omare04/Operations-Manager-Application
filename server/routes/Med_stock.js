@@ -1,8 +1,12 @@
 import express, { query } from "express";
 import mysql from "mysql2";
+import { userAuthMiddleWare } from "./users.js";
+import cors from "cors";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
 
 const app = express();
-const port = 3000;
 
 app.use(express.json());
 
@@ -21,6 +25,18 @@ const pool = mysql.createPool({
 });
 
 const MedRouter = express.Router();
+MedRouter.use(cookieParser());
+MedRouter.use(userAuthMiddleWare);
+MedRouter.use(bodyParser.urlencoded({ extended: true }));
+dotenv.config();
+MedRouter.use(bodyParser.json());
+MedRouter.use(
+  cors({
+    origin: "http://localhost:5173",
+    method: ["GET", "POST", "PUT"],
+    credentials: true,
+  })
+);
 
 MedRouter.route("/")
   .get((req, res) => {
@@ -249,7 +265,7 @@ MedRouter.route("/StockUpdateMission/:ID").put((req, res) => {
           const month = String(currentDate.getMonth() + 1).padStart(2, "0");
           const day = String(currentDate.getDate()).padStart(2, "0");
           const formattedDate = `${year}-${month}-${day}`;
-          
+
           pool.query(
             insertIntoERHistoryQuery,
             [

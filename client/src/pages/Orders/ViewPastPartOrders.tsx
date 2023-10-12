@@ -55,7 +55,7 @@ export default function ViewPastMedOrders() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3331/Orders/PastPartOrders")
+      .get("http://localhost:3331/Orders/PastPartOrders", {withCredentials: true})
       .then((result) => {
         setData(result.data);
         setLoading(false);
@@ -117,7 +117,7 @@ export default function ViewPastMedOrders() {
           .get(
             `http://localhost:3331/Orders/ExportPartPO/${
               Object.keys(rowSelection)[i]
-            }`
+            }`, {withCredentials: true}
           )
           .then((result) => {
             if (result.data && result.data.length > 0) {
@@ -135,6 +135,7 @@ export default function ViewPastMedOrders() {
                     },
                   },
                   responseType: "blob",
+                  withCredentials: true
                 })
                 .then((result2) => {
                   downloadPdf(result.data[0].PO, result2.data);

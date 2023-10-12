@@ -119,7 +119,7 @@ export default function MedStockModal({ open, data, onClose }) {
             RemovalQty: quantity.val,
             productName: data.Product_name,
             productID: data.Product_ID,
-          })
+          }, {withCredentials: true})
           .then((result) => {
             alert(result.data.message);
             //This route is to keep track of the entry and exits of each Drugs for any given mission.
@@ -132,7 +132,7 @@ export default function MedStockModal({ open, data, onClose }) {
                   flightNo.value,
                   type,
                 ],
-              })
+              }, {withCredentials: true})
               .then((result) => {
                 // console.log("UpdateEvent request success:", result);
                 if (result.status === 200) {
@@ -152,7 +152,7 @@ export default function MedStockModal({ open, data, onClose }) {
           RemovalQty: quantity.val,
           productName: data.Product_name,
           productID: data.Product_ID,
-        })
+        }, {withCredentials: true})
         .then((result) => {
           alert(result.data.message);
           //This route is to keep track of the entry and exits of each Drugs for any given mission.
@@ -165,7 +165,7 @@ export default function MedStockModal({ open, data, onClose }) {
                 flightNo.value,
                 type,
               ],
-            })
+            }, {withCredentials: true})
             .then((result) => {
               if (result.status === 200) {
                 location.reload();
@@ -268,7 +268,7 @@ export function OrderUpdateModal({ open, data, onClose, editRoute, orderId }) {
       .put(`http://localhost:3331/Orders/${editRoute}/${orderId}`, {
         type: dropdown.selectedValue,
         value: value.val,
-      })
+      }, {withCredentials: true})
       .then((result) => {
         alert(result.data.message);
         location.reload();

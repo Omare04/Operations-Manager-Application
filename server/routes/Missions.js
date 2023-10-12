@@ -1,5 +1,10 @@
 import express, { query, response } from "express";
 import mysql from "mysql2";
+import { userAuthMiddleWare } from "./users.js";
+import cors from "cors";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
 
 const app = express();
 const port = 3000;
@@ -25,12 +30,26 @@ const pool = mysql.createPool({
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const MissionRouter = express.Router();
+export const MissionRouter = express();
+MissionRouter.use(cookieParser());
+MissionRouter.use(bodyParser.urlencoded({ extended: true }));
+dotenv.config();
+MissionRouter.use(bodyParser.json());
+MissionRouter.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT"],
+    credentials: true,
+  })
+);
+
+MissionRouter.use(userAuthMiddleWare);
 
 MissionRouter.route("/updateMissionStatus/:ID").put((req, res) => {
   const query = "UPDATE missions SET active = '0' WHERE missions.id = ?";
   pool.query(query, req.params.ID, (err, result) => {
     if (err) {
+      console.log(err);
       res.status(500).send("Internal Server Error");
     } else {
       res.status(200).send("Mission Status Updated Successfully");

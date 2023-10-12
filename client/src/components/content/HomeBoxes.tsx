@@ -56,7 +56,7 @@ export function ActiveOrders() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3331/Orders/Active")
+      .get("http://localhost:3331/Orders/Active", { withCredentials: true })
       .then((res) => {
         setActiveOrders(res.data);
       })
@@ -71,9 +71,13 @@ export function ActiveOrders() {
         try {
           const orderInfoArray = await Promise.all(
             activeOrders.map((order) =>
-              axios.post("http://localhost:3331/Med_Stock/GetOrderItems", {
-                item: order.product_id,
-              })
+              axios.post(
+                "http://localhost:3331/Med_Stock/GetOrderItems",
+                {
+                  item: order.product_id,
+                },
+                { withCredentials: true }
+              )
             )
           );
           const orderData = orderInfoArray.map((res) => res.data);
@@ -107,7 +111,7 @@ export function ActiveOrders() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3331/Orders/ActiveCount")
+      .get("http://localhost:3331/Orders/ActiveCount", {withCredentials: true})
       .then((result) => {
         // console.log("here " + result);
         setActiveOrdersCount(result.data.payload);
@@ -149,7 +153,7 @@ export function ApproachingExpiry() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3331/Med_stock/Expired`)
+      .get(`http://localhost:3331/Med_stock/Expired`, {withCredentials: true})
       .then((res) => {
         setData(res.data);
       })
@@ -185,7 +189,7 @@ export function OrderDataChart() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3331/Orders/OrderChart")
+      .get("http://localhost:3331/Orders/OrderChart", {withCredentials: true})
       .then((result) => {
         setTableData(result.data);
       })
@@ -217,7 +221,7 @@ export function OrderDataChart() {
             <XAxis
               dataKey="OrderMonth"
               tickFormatter={(value) => `Month: ${value}`}
-              ></XAxis>
+            ></XAxis>
             <YAxis />
             <Tooltip
               contentStyle={{ backgroundColor: "#fff", padding: "8px" }}

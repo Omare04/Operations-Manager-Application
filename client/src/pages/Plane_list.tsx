@@ -84,7 +84,7 @@ function Plane_list() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3331/Planes")
+      .get("http://localhost:3331/Planes", {withCredentials: true})
       .then((result) => {
         setData(result.data);
         setLoading(false);

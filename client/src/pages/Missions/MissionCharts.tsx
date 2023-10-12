@@ -9,7 +9,7 @@ export function BarChartComp() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3331/Missions/FlightsPerPlane")
+      .get("http://localhost:3331/Missions/FlightsPerPlane", {withCredentials: true})
       .then((result) => {
         setData(result.data);
       });

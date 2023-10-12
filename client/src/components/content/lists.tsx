@@ -717,7 +717,7 @@ export function OrderTable({ route, table_height, subMenuRoute, deleteRoute }) {
     axios
       .delete(`http://localhost:3331/Orders/${deleteRoute}/${item.order_id}`, {
         params: { PO: item.PO, product: item.product_name },
-      })
+      }, {withCredentials: true})
       .then((result) => {
         alert(result.data.message);
         location.reload();
@@ -816,7 +816,7 @@ export function OrderTable({ route, table_height, subMenuRoute, deleteRoute }) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3331/${route}`)
+      .get(`http://localhost:3331/${route}`, {withCredentials: true})
       .then((payload) => {
         setData(payload.data);
       })
@@ -845,7 +845,7 @@ export function OrderTable({ route, table_height, subMenuRoute, deleteRoute }) {
     if (indexState != null) {
       axios
         .get(
-          `http://localhost:3331/Orders/${subMenuRoute}/${data[indexState].PO}`
+          `http://localhost:3331/Orders/${subMenuRoute}/${data[indexState].PO}`, {withCredentials: true}
         )
         .then((result) => {
           setOrderDetails(result.data);

@@ -1,13 +1,31 @@
 import express from "express";
 import mysql from "mysql2";
+import { userAuthMiddleWare } from "./users.js";
+import cors from "cors";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
 
-const MaintenanceStock = express.Router();
+const MaintenanceStock = express();
+MaintenanceStock.use(bodyParser.urlencoded({ extended: true }));
+
+MaintenanceStock.use(cookieParser());
+dotenv.config();
+MaintenanceStock.use(bodyParser.json());
 
 const dbport = 3301;
 const dbhost = "localhost";
 const dbname = "Stock_AOM";
 const dbuser = "root";
 const dbpass = " ";
+
+MaintenanceStock.use(
+  cors({
+    origin: "http://localhost:5173",
+    method: ["GET", "POST", "PUT"],
+    credentials: true,
+  })
+);
 
 const pool = mysql.createPool({
   host: dbhost,
@@ -17,18 +35,20 @@ const pool = mysql.createPool({
   dbpass: dbpass,
 });
 
+MaintenanceStock.use(userAuthMiddleWare);
+
 MaintenanceStock.route("/")
   .get((req, res) => {
     const query = "SELECT * from Maintenance_stock";
     pool.query(query, (err, response) => {
       if (err) {
-        res.send(err);
+        res.status(500).send({ error: "An error occurred" });
       } else {
-        res.send(response);
+        res.status(200).send(response);
       }
     });
   })
-  .post((req, res) => { 
+  .post((req, res) => {
     const query = `INSERT INTO Maintenance_stock (part_number, product_name, product_type, call_sign, price, quantity)
      VALUES(?,?,?,?,?,?)`;
 
@@ -82,7 +102,7 @@ MaintenanceStock.route("/pn").get((req, res) => {
 
   pool.query(query, (err, result) => {
     if (err) {
-      res.status(500).json({ error: "An error occurred" }); 
+      res.status(500).json({ error: "An error occurred" });
     } else {
       res.status(200).send(result);
     }
@@ -103,7 +123,6 @@ MaintenanceStock.route("/:name&:callSign").get((req, res) => {
 });
 
 MaintenanceStock.route("/TotalStock").get((req, res) => {
-
   const query = "SELECT COUNT(*) AS total FROM Maintenance_stock";
 
   pool.query(query, (err, result) => {

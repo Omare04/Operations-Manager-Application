@@ -2,28 +2,28 @@ import express, { query, response } from "express";
 import mysql from "mysql2";
 import bcrypt from "bcrypt";
 import bodyParser from "body-parser";
-import session from "express-session";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import axios from "axios";
+import crypto from "crypto";
+import { serialize } from "v8";
 
-//This is the real test 
+const router = express();
 
-const router = express.Router();
-router.use(express.json());
-
-router.use(cookieParser());
 router.use(bodyParser.urlencoded({ extended: true }));
 
 //this configures our environment file .env
+router.use(cookieParser());
 dotenv.config();
+router.use(bodyParser.json());
 
 const dbport = 3301;
 const dbhost = "localhost";
 const dbname = "Stock_AOM";
 const dbuser = "root";
-const dbpass = " ";
+const dbpass = "";
 
 const pool = mysql.createPool({
   host: dbhost,
@@ -33,6 +33,13 @@ const pool = mysql.createPool({
   dbpass: dbpass,
 });
 
+router.use(
+  cors({
+    origin: "http://localhost:5173",
+    method: ["GET", "POST", "PUT"],
+    credentials: true,
+  })
+);
 
 export async function getUser(id) {
   try {
@@ -73,23 +80,22 @@ function genAccessToken(user) {
 //This function is used to generate a access token and returns it.
 //exp: 1d
 function genRefreshToken(user) {
-  return jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "1d" });
+  return jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "1h" });
 }
 
 //This function is used as MIDDLEWARE to authenticate the users token.
-function authToken(req, res, next) {
+//Use this route for all HTTP requests.
+export function authToken(req, res, next) {
   //the token taken from the header will be brought up from the validateRefreshToken() function
   //which will create a new access token.
-
-  //The header name will be called authorization
-  const authHeader = req.headers["authorization"];
-  //And since the header value is Bearer: token we need to retrieve the 2nd
-  //Value of that header which is our token.
-  const token = authHeader && authHeader.split(" ")[1];
+  const token = req.cookies("tokenId");
 
   //If the user does not have access.
   if (token == null) {
-    res.sendStatus(401).send({ message: "You do not have access" });
+    //401 being unauthorized
+    res
+      .sendStatus(401)
+      .send({ message: "You do not have access to this route" });
   }
 
   //Now that the token is confirmed to have some value, you compare it against our own secret token
@@ -101,17 +107,18 @@ function authToken(req, res, next) {
       return res.sendStatus(403);
     } else {
       req.user = user;
-      //This next() function moves on from the middleware and procceeds to the HTTP request werem we implemented that middleware
+      //This next() function moves on from the middleware and procceeds to the HTTP request were we implemented that middleware
       next();
     }
   });
 }
 
-function setRefreshToken(token, user) {
+//Sets out refresh token in the database, for logging user activity
+function setRefreshToken(token, user, tokenID) {
   return new Promise((resolve, reject) => {
     const insertQuery =
-      "INSERT INTO refresh_tokens (user_id, token) VALUES (?, ?)";
-    const values = [user["id"], token];
+      "INSERT INTO refresh_tokens (user_id, token, token_id) VALUES (?, ?, ?)";
+    const values = [user["id"], token, tokenID];
 
     pool.query(insertQuery, values, (err, insertResult) => {
       if (err) {
@@ -124,25 +131,23 @@ function setRefreshToken(token, user) {
   });
 }
 
-router.use(
-  cors({
-    origin: "http://localhost:5173",
-    method: ["GET", "POST"],
-    credentials: true,
-  })
-);
+function getRefreshToken(tokenId) {
+  return new Promise((resolve, reject) => {
+    const query = "SELECT token FROM refresh_tokens where token_id = ? ";
 
-router.use(
-  session({
-    key: "userId",
-    secret: "bloobsecretmonkey",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      expires: 60 * 60 * 24,
-    },
-  })
-);
+    pool.query(query, tokenId, (err, result) => {
+      if (err) {
+        reject(false);
+      } else {
+        if (result.length === 0) {
+          reject(false);
+        } else {
+          resolve(result[0].token);
+        }
+      }
+    });
+  });
+}
 
 //To register the user
 router
@@ -181,125 +186,202 @@ router
     });
   });
 
-//Route to Authenticate the user
-router
-  .route("/login")
-  .post((req, res) => {
-    const email = req.body.email;
-    const password = req.body.password;
+//This is where we generate the random ID for each refresh token that is distributed.
+function generateRandomString(length) {
+  const bytes = crypto.randomBytes(length);
+  const randomString = bytes.toString("hex");
+  return randomString;
+}
 
-    const query = "SELECT * FROM users WHERE email = ?";
+//Route to Authenticate the user when logging in
+router.route("/login").post((req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
 
-    pool.query(query, email, (err, result) => {
-      if (result.length > 0) {
-        bcrypt.compare(password, result[0].password, (err, resultpass) => {
-          if (err) {
-            res.send(err);
-            return;
-          }
-          if (resultpass) {
-            const user = {
-              id: result[0].id,
-              fname: result[0].fname,
-              lname: result[0].lname,
-              email: result[0].email,
-            };
+  const query = "SELECT * FROM users WHERE email = ?";
 
-            const accessToken = genAccessToken(user);
-            const refreshToken = genRefreshToken(user);
+  pool.query(query, email, (err, result) => {
+    if (result.length > 0) {
+      bcrypt.compare(password, result[0].password, (err, resultpass) => {
+        if (err) {
+          res.status(403);
+          return;
+        }
+        if (resultpass) {
+          const user = {
+            id: result[0].id,
+            fname: result[0].fname,
+            lname: result[0].lname,
+            email: result[0].email,
+            position: result[0].position,
+          };
 
-            res.cookie("userSession", refreshToken, {
-              httpOnly: true,
-            });
+          const tokenId = generateRandomString(16);
 
-            //This function sets the users refresh token accompanied with the users id
-            setRefreshToken(refreshToken, user)
-              .then(() => {
-                res.send({
-                  loggedIn: true,
-                  message: "Login Successful",
-                });
-              })
-              .catch((err) => {
-                res
-                  .status(500)
-                  .send("Error occurred while setting refresh token");
+          const accessToken = genAccessToken(user);
+          const refreshToken = genRefreshToken(user);
+
+          //Set out access token in the http only cookie
+          res.cookie("accessToken", accessToken, {
+            path: "/",
+            domain: "localhost",
+            httpOnly: true,
+          });
+          res.cookie("tokenId", tokenId, {
+            httpOnly: false,
+          });
+
+          // This function sets the users refresh token accompanied with the users id into the database
+          setRefreshToken(refreshToken, user, tokenId)
+            .then(() => {
+              res.send({
+                loggedIn: true,
+                user: user,
+                message: "Login Successful",
               });
-
-            return; // Terminate the request-response cycle
-          } else {
-            res.send({
-              message:
-                "The Username/Password you've entered is incorrect, please try again.",
-              loggedIn: false,
-              user: result,
+            })
+            .catch((err) => {
+              res
+                .status(500)
+                .send("Error occurred while setting refresh token");
             });
-            return;
-          }
-        });
-      } else {
-        res.send({ message: "This user does not exist" });
-        return;
-      }
-    });
-  })
-  //the get request takes in the middleware which authenticates the users. It returns a success message
-  //If the middleware (authtoken) has been successful
-  .get(authToken, (req, res) => {
-    //This sets the request headers value to the token we retrieve from the
-    //Client using http only cookie, which is set in the login POST request.
-    //Because in the login router POST we've already set the refresh token as our cookie.
-    const token = req.headers["Authorization"];
-    res.set("Authorization", token);
-    //Now that everything has been checked, here is where we send down the user information that we need.
-    //so the get request for the route login will be used to retriev the users information.
-    res.send(req.user);
-    return res.json("Authenticated");
-    // }
+
+          return;
+        } else {
+          res.sendStatus(500);
+          return;
+        }
+      });
+    } else {
+      res
+        .send({ message: "This user does not exist", incorrect: true })
+        .status(403);
+    }
   });
+});
+
+router.get("/getRefreshToken", (req, res) => {
+  res.send(req.cookies);
+});
 
 //We will be calling this route everytime we need to request the infomation of the user or
 //To verify if the user is still logged in.
-router.route("/token").post((req, res) => {
-  //This refresh token will be the token from the cookie
-  const refreshToken = req.body.token;
+//So put this in the useEffect hook in the react authwrapper
 
-  if (refreshToken == "null") {
-    return res.send({ loggedIn: false });
-  } else {
-    //This needs a query that checks if the refresh token is valid good or removed.
-    //Query to the db to retrieve the refresh token
-    pool.query(
-      "SELECT token from refresh_tokens WHERE token = ?",
-      refreshToken,
-      (err, result) => {
-        if (err) {
-          res.send(err);
-        } else {
-          if (result.length > 0) {
-            validateRefreshToken(refreshToken)
-              .then((user) => {
-                let users = [
-                  {
-                    id: user.id,
-                    fname: user.fname,
-                    lname: user.lname,
-                    email: user.email,
-                  },
-                ];
-                const accessToken = genAccessToken({ user: users });
-                res.json({ accessToken: accessToken, user: users });
-              })
-              .catch(() => {
-                res.sendStatus(403);
-              });
-          } else {
-            res.sendStatus(403);
-          }
-        }
-      }
-    );
+//validates our access token
+router.route("/token").get((req, res) => {
+  const tokenId = req.cookies.tokenId;
+  // Check if tokenId is null or undefined, which means the user does not have one set in their cookie
+  if (tokenId === null || tokenId === undefined) {
+    return res.send({ loggedIn: false, tokenId: tokenId });
   }
+
+  // Get the refresh token based on its token ID
+  getRefreshToken(tokenId)
+    .then((token) => {
+      if (token == "null" || token == undefined) {
+        return res
+          .cookie("accessToken", "", {
+            path: "/",
+            domain: "localhost",
+            httpOnly: true,
+            expires: new Date(0),
+          })
+          .cookie("tokenId", "", {
+            path: "/",
+            domain: "localhost",
+            httpOnly: true,
+            expires: new Date(0),
+          })
+          .send({ loggedIn: false })
+          .status(403);
+      }
+
+      // Validate the access token
+      validateAccessToken(req.cookies.accessToken)
+        .then((result) => {
+          // If the access token is still valid, send down the user and login status
+          res.cookie("accessToken", req.cookies.accessToken, {
+            httpOnly: true,
+            path: "/",
+            domain: "localhost",
+          });
+          res.send({
+            loggedIn: true,
+            user: {
+              id: result.user.id,
+              fname: result.user.fname,
+              lname: result.user.lname,
+              email: result.user.email,
+              position: result.user.position,
+            },
+          });
+        })
+        .catch((e) => {
+          // If the access token is not valid, check if the refresh token is still valid
+          validateRefreshToken(token)
+            .then((user) => {
+              // If it is, generate a new access token and set it into the http cookie
+              const accessToken = genAccessToken({
+                id: user.id,
+                fname: user.fname,
+                lname: user.lname,
+                email: user.email,
+                position: user.position,
+              });
+              res.cookie("accessToken", accessToken, {
+                httpOnly: true,
+                path: "/",
+                domain: "localhost",
+              });
+              res.send({
+                loggedIn: true,
+                user: {
+                  id: user.id,
+                  fname: user.fname,
+                  lname: user.lname,
+                  email: user.email,
+                  position: user.position,
+                },
+              });
+            })
+            .catch((e) => {
+              // It isn't valid, set the logged-in value as false
+              res
+                .cookie("accessToken", "", {
+                  path: "/",
+                  domain: "localhost",
+                  httpOnly: true,
+                  expires: new Date(0),
+                })
+                .cookie("tokenId", "", {
+                  path: "/",
+                  domain: "localhost",
+                  httpOnly: true,
+                  expires: new Date(0),
+                })
+                .send({ loggedIn: false })
+                .status(403);
+            });
+        });
+    })
+    .catch((e) => {
+      res
+        .cookie("accessToken", "", {
+          path: "/",
+          domain: "localhost",
+          httpOnly: true,
+          expires: new Date(0),
+        })
+        .cookie("tokenId", "", {
+          path: "/",
+          domain: "localhost",
+          httpOnly: true,
+          expires: new Date(0),
+        })
+        .send({ loggedIn: false })
+        .status(403);
+    });
 });
 
 //This function takes in a refresh token that has been retrieved from our database
@@ -318,18 +400,45 @@ function validateRefreshToken(refreshToken) {
   });
 }
 
+function validateAccessToken(accessToken) {
+  return new Promise((resolve, reject) => {
+    jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve({ user: user });
+      }
+    });
+  });
+}
+
 //This allows us to delete the refresh token to allow us to logout
 //Unsetting the refresh token and removing that users session
 router.route("/logout").delete((req, res) => {
-  const query = "DELETE FROM refresh_tokens WHERE token = ?";
-  pool.query(query, req.query.token, (err, result) => {
+  const tokenId = req.cookies.tokenId;
+  const query = "DELETE FROM refresh_tokens WHERE token_id = ?";
+
+  pool.query(query, tokenId, (err, result) => {
     if (err) {
       return res.sendStatus(401);
     } else {
-      console.log("mission complete");
-      return res
-        .status(204)
-        .send({ message: "Token Deleted", loggedIn: false });
+      // Remove the cookies
+      res
+        .cookie("accessToken", "", {
+          path: "/",
+          domain: "localhost",
+          httpOnly: true,
+          expires: new Date(0),
+        })
+        .cookie("tokenId", "", {
+          path: "/",
+          domain: "localhost",
+          httpOnly: true,
+          expires: new Date(0),
+        });
+
+      // Set the status and send the JSON response
+      res.status(204).json({ loggedIn: false });
     }
   });
 });
@@ -340,8 +449,6 @@ router.route("/:id").get((req, res) => {
 
   pool.query(query, [id], (error, results) => {
     if (error) {
-      // Handle the error
-      console.log(error);
       res.status(500).json({ message: "Internal Server Error" });
       return;
     } else {
@@ -350,5 +457,89 @@ router.route("/:id").get((req, res) => {
   });
 });
 
+router.route("/getCookie").get((req, res) => {
+  res.send(req.cookies);
+});
+
+export function userAuthMiddleWare(req, res, next) {
+  // Check if tokenId is null or undefined, which means the user does not have one set in their cookie
+  const tokenId = req.cookies.tokenId;
+
+  //Figure how to retrieve the cookies from the http cookies when activating the middleware.
+
+  if (tokenId === null || tokenId === undefined) {
+    return res
+      .cookie("accessToken", "", {
+        path: "/",
+        domain: "localhost",
+        httpOnly: true,
+        expires: new Date(0),
+      })
+      .cookie("tokenId", "", {
+        path: "/",
+        domain: "localhost",
+        httpOnly: true,
+        expires: new Date(0),
+      })
+      .status(403)
+      .send({ loggedIn: false, tokenId: tokenId });
+  }
+
+  // Get the refresh token based on its token ID
+  getRefreshToken(tokenId)
+    .then((token) => {
+      if (token === null || token === undefined) {
+        return res.status(403).send({ loggedIn: false });
+      }
+
+      // Validate the access token
+      validateAccessToken(req.cookies.accessToken)
+        .then((result) => {
+          next();
+        })
+        .catch((e) => {
+          // If the access token is not valid, check if the refresh token is still valid
+          validateRefreshToken(token)
+            .then((user) => {
+              next();
+            })
+            .catch((e) => {
+              console.log("loggin in false");
+              res
+                .cookie("accessToken", "", {
+                  path: "/",
+                  domain: "localhost",
+                  httpOnly: true,
+                  expires: new Date(0),
+                })
+                .cookie("tokenId", "", {
+                  path: "/",
+                  domain: "localhost",
+                  httpOnly: true,
+                  expires: new Date(0),
+                })
+                .status(403)
+                .send({ loggedIn: false });
+            });
+        });
+    })
+    .catch((e) => {
+      res
+        .cookie("accessToken", "", {
+          path: "/",
+          domain: "localhost",
+          httpOnly: true,
+          expires: new Date(0),
+        })
+        .cookie("tokenId", "", {
+          path: "/",
+          domain: "localhost",
+          httpOnly: true,
+          expires: new Date(0),
+        })
+        .status(403)
+        .send({ loggedIn: false });
+    });
+}
 
 export default router;

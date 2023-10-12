@@ -26,7 +26,7 @@ const Grid = styled.div`
   padding-right: 10px;
   padding-bottom: 10px;
   height: 100vh;
-  z-index: 3; 
+  z-index: 3;
 `;
 
 const TableWrap = styled.div`
@@ -49,10 +49,10 @@ const StyledHeader = styled.div`
   grid-column: 1/4;
   grid-row: 1;
   color: white;
-  background-image: linear-gradient(to right, #0080ff , #095df0);
+  background-image: linear-gradient(to right, #0080ff, #095df0);
   /* border: 1px solid #bebebe; */
   height: 50px;
-  font-weight: bold;  
+  font-weight: bold;
   border-radius: 5px;
   box-shadow: 0 0 5px #5757574a;
   z-index: 3;
@@ -68,7 +68,7 @@ function MaintenanceStock() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("http://localhost:3331/Maintanance_stock")
+      .get("http://localhost:3331/Maintanance_stock", { withCredentials: true })
       .then((result) => {
         setData(result.data);
         setLoading(false);
@@ -170,7 +170,7 @@ function MaintenanceStock() {
                     flexWrap: "wrap",
                   }}
                 >
-                  {clickState ? <Box >{clickMessage}</Box> : null}
+                  {clickState ? <Box>{clickMessage}</Box> : null}
                   <Button
                     color="primary"
                     startIcon={<FaIcons.FaPlus />}

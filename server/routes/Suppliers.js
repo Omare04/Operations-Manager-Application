@@ -1,5 +1,10 @@
 import express, { query, response } from "express";
 import mysql from "mysql2";
+import { userAuthMiddleWare } from "./users.js";
+import cors from "cors";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
 
 const dbport = 3301;
 const dbhost = "localhost";
@@ -16,6 +21,18 @@ const pool = mysql.createPool({
 });
 
 const SupplierRouter = express.Router();
+SupplierRouter.use(cookieParser());
+SupplierRouter.use(userAuthMiddleWare);
+SupplierRouter.use(bodyParser.urlencoded({ extended: true }));
+dotenv.config();
+SupplierRouter.use(bodyParser.json());
+SupplierRouter.use(
+  cors({
+    origin: "http://localhost:5173",
+    method: ["GET", "POST", "PUT"],
+    credentials: true,
+  })
+);
 
 SupplierRouter.route("/")
   .get((req, res) => {

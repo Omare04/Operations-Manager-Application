@@ -219,26 +219,34 @@ export function AddStockModalEXP({ open, onClose }) {
       setLoading(true);
 
       axios
-        .post("http://localhost:3331/Med_stock", {
-          data: [
-            productType,
-            productName,
-            formattedDate,
-            "",
-            "1684438793",
-            quantity,
-          ],
-        })
+        .post(
+          "http://localhost:3331/Med_stock",
+          {
+            data: [
+              productType,
+              productName,
+              formattedDate,
+              "",
+              "1684438793",
+              quantity,
+            ],
+          },
+          { withCredentials: true }
+        )
         .then((suc) => {
           axios
-            .post("http://localhost:3331/Med_stock/StockEntries", {
-              data: {
-                product_name: productName,
-                uid: "1684438793",
-                quantity: quantity,
-                type: "Enter",
+            .post(
+              "http://localhost:3331/Med_stock/StockEntries",
+              {
+                data: {
+                  product_name: productName,
+                  uid: "1684438793",
+                  quantity: quantity,
+                  type: "Enter",
+                },
               },
-            })
+              { withCredentials: true }
+            )
             .then((result) => {})
             .catch((e) => {
               setErrorInserting(true);
@@ -400,9 +408,12 @@ export function AddMaintenanceStockModal({ open, onClose }) {
 
   //Dynamically retrieve each plane.
   useEffect(() => {
-    axios.get("http://localhost:3331/planes/getName").then((result) => {
-      setPlaneList(result.data);
-    });
+    axios.get("http://localhost:3331/planes/getName").then(
+      (result) => {
+        setPlaneList(result.data);
+      },
+      { withCredentials: true }
+    );
   }, []);
 
   const productTypes = [
@@ -484,16 +495,20 @@ export function AddMaintenanceStockModal({ open, onClose }) {
       setLoading(true);
 
       axios
-        .post("http://localhost:3331/Maintanance_stock", {
-          data: [
-            values.pn,
-            values.productName,
-            values.productType,
-            values.plane,
-            values.price,
-            values.quantity,
-          ],
-        })
+        .post(
+          "http://localhost:3331/Maintanance_stock",
+          {
+            data: [
+              values.pn,
+              values.productName,
+              values.productType,
+              values.plane,
+              values.price,
+              values.quantity,
+            ],
+          },
+          { withCredentials: true }
+        )
         .then((suc) => {
           setReloadPage(true);
           setTimeout(() => {
@@ -755,14 +770,18 @@ export function AddMedicalEquipmentStockModal({ open, onClose }) {
       setRenderForm(false);
       setLoading(true);
       axios
-        .post("http://localhost:3331/MedicalEquipmentStock/AddItems", {
-          data: [
-            values.productName,
-            values.quantity,
-            formattedDate,
-            values.location,
-          ],
-        })
+        .post(
+          "http://localhost:3331/MedicalEquipmentStock/AddItems",
+          {
+            data: [
+              values.productName,
+              values.quantity,
+              formattedDate,
+              values.location,
+            ],
+          },
+          { withCredentials: true }
+        )
         .then((suc) => {
           setReloadPage(true);
           setTimeout(() => {
@@ -975,9 +994,13 @@ export function AddPlane({ open, onClose }) {
       setLoading(true);
 
       axios
-        .post("http://localhost:3331/planes/Add", {
-          data: [values.callSign, values.company, values.model, values.year],
-        })
+        .post(
+          "http://localhost:3331/planes/Add",
+          {
+            data: [values.callSign, values.company, values.model, values.year],
+          },
+          { withCredentials: true }
+        )
         .then((suc) => {
           setReloadPage(true);
           setTimeout(() => {
@@ -1192,15 +1215,19 @@ export function AddSupplier({ open, onClose }) {
       setLoading(true);
 
       axios
-        .post("http://localhost:3331/Supplier", {
-          data: [
-            values.supplierName,
-            values.country,
-            values.email,
-            values.address,
-            values.phoneNumber,
-          ],
-        })
+        .post(
+          "http://localhost:3331/Supplier",
+          {
+            data: [
+              values.supplierName,
+              values.country,
+              values.email,
+              values.address,
+              values.phoneNumber,
+            ],
+          },
+          { withCredentials: true }
+        )
         .then((suc) => {
           setReloadPage(true);
           setTimeout(() => {
@@ -1412,24 +1439,32 @@ export function EditDrugModal({ open, onClose, data }) {
         setRenderForm(false);
         setLoading(true);
         axios
-          .put("http://localhost:3331/Med_stock/StockRemoval", {
-            currentQty: data.Quantity,
-            RemovalQty: values.quantity,
-            productName: data.Product_name,
-            productID: data.Product_ID,
-          })
+          .put(
+            "http://localhost:3331/Med_stock/StockRemoval",
+            {
+              currentQty: data.Quantity,
+              RemovalQty: values.quantity,
+              productName: data.Product_name,
+              productID: data.Product_ID,
+            },
+            { withCredentials: true }
+          )
           .then((result) => {
             //This route is to keep track of the entry and exits of each Drugs for any given mission.
             axios
-              .post("http://localhost:3331/Med_stock/UpdateEvent", {
-                data: [
-                  data.Product_ID,
-                  data.uid,
-                  values.quantity,
-                  values.flightNo,
-                  values.type,
-                ],
-              })
+              .post(
+                "http://localhost:3331/Med_stock/UpdateEvent",
+                {
+                  data: [
+                    data.Product_ID,
+                    data.uid,
+                    values.quantity,
+                    values.flightNo,
+                    values.type,
+                  ],
+                },
+                { withCredentials: true }
+              )
               .then((result) => {
                 setReloadPage(true);
                 setTimeout(() => {
@@ -1451,24 +1486,32 @@ export function EditDrugModal({ open, onClose, data }) {
       setRenderForm(false);
       setLoading(true);
       axios
-        .put("http://localhost:3331/Med_stock/StockUpdate", {
-          currentQty: data.Quantity,
-          RemovalQty: values.quantity,
-          productName: data.Product_name,
-          productID: data.Product_ID,
-        })
+        .put(
+          "http://localhost:3331/Med_stock/StockUpdate",
+          {
+            currentQty: data.Quantity,
+            RemovalQty: values.quantity,
+            productName: data.Product_name,
+            productID: data.Product_ID,
+          },
+          { withCredentials: true }
+        )
         .then((result) => {
           //This route is to keep track of the entry and exits of each Drugs for any given mission.
           axios
-            .post("http://localhost:3331/Med_stock/UpdateEvent", {
-              data: [
-                data.Product_ID,
-                data.uid,
-                values.quantity,
-                values.flightNo,
-                values.type,
-              ],
-            })
+            .post(
+              "http://localhost:3331/Med_stock/UpdateEvent",
+              {
+                data: [
+                  data.Product_ID,
+                  data.uid,
+                  values.quantity,
+                  values.flightNo,
+                  values.type,
+                ],
+              },
+              { withCredentials: true }
+            )
             .then((result) => {
               setReloadPage(true);
               setTimeout(() => {
@@ -1686,7 +1729,8 @@ export function EditMedicalEquipmentStockModal({ open, onClose, data }) {
               values.date,
               values.location,
             ],
-          }
+          },
+          { withCredentials: true }
         )
         .then((suc) => {
           setReloadPage(true);
@@ -1912,10 +1956,14 @@ export function EditOrderModal({ open, onClose, data, route, orderId }) {
       setRenderForm(false);
       setLoading(true);
       axios
-        .put(`http://localhost:3331/Orders/${route}/${orderId}`, {
-          type: values.type,
-          value: values.value,
-        })
+        .put(
+          `http://localhost:3331/Orders/${route}/${orderId}`,
+          {
+            type: values.type,
+            value: values.value,
+          },
+          { withCredentials: true }
+        )
         .then((result) => {
           setReloadPage(true);
           setTimeout(() => {
@@ -2217,20 +2265,20 @@ export function ViewMissionModal({ open, onClose, data }) {
   };
 
   const checkEntryOfFields = (counter) => {
-    // if (
-    //   missionState.drugs.length > 0 &&
-    //   missionState.equipment.length > 0 &&
-    //   missionState.personele.length > 0 &&
-    //   missionState.flightInfo.arrival !== " " &&
-    //   missionState.flightInfo.departure !== " " &&
-    //   missionState.flightInfo.flightNumber !== " " &&
-    //   missionState.flightInfo.plane !== " "
-    // ) {
-    return <MissionSummaryPage page={counter} />;
-    // } else {
-    //   setProgressCounter(0);
-    //   alert("Please Complete All fields");
-    // }
+    if (
+      missionState.drugs.length > 0 &&
+      missionState.equipment.length > 0 &&
+      missionState.personele.length > 0 &&
+      missionState.flightInfo.arrival !== " " &&
+      missionState.flightInfo.departure !== " " &&
+      missionState.flightInfo.flightNumber !== " " &&
+      missionState.flightInfo.plane !== " "
+    ) {
+      return <MissionSummaryPage page={counter} />;
+    } else {
+      setProgressCounter(0);
+      alert("Please Complete All fields");
+    }
   };
 
   const renderPages = (counter) => {
@@ -2378,6 +2426,7 @@ const StyledListTableItems = styled.tr`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  table-layout: fixed;
   gap: 4px;
   width: 100%;
   /* flex-direction: column;  */
@@ -2445,9 +2494,12 @@ function AddCrewMissionsPage({ page }) {
   useEffect(() => {
     axios
       .get("http://localhost:3331/users/MedicalCrew")
-      .then((result) => {
-        setCrewFetch(result.data);
-      })
+      .then(
+        (result) => {
+          setCrewFetch(result.data);
+        },
+        { withCredentials: true }
+      )
       .catch((e) => {
         //handle Error
       });
@@ -2527,9 +2579,11 @@ function AddDrugsMissionsPage({ page }) {
     React.useContext(missionDataContext);
 
   useEffect(() => {
-    axios.get("http://localhost:3331/Med_stock").then((result) => {
-      setFetchedData(result.data);
-    });
+    axios
+      .get("http://localhost:3331/Med_stock", { withCredentials: true })
+      .then((result) => {
+        setFetchedData(result.data);
+      });
   }, [page]);
 
   useEffect(() => {
@@ -2601,11 +2655,11 @@ function AddDrugsMissionsPage({ page }) {
                     paddingTop: "10px",
                     color: "#464646",
                   }}
-                  onClick={() => changeQty(index, 1)} // Increment by 1
+                  onClick={() => changeQty(index, 1)}
                 />
                 <FaIcons.FaMinus
                   style={{ marginRight: "5px", color: "#464646" }}
-                  onClick={() => changeQty(index, -1)} // Decrement by 1
+                  onClick={() => changeQty(index, -1)}
                 />
               </StyledIcons>
               <span style={{ marginRight: "10px", position: "relative" }}>
@@ -2636,9 +2690,13 @@ function AddMedicalEquipmentPage({ page }) {
     React.useContext(missionDataContext);
 
   useEffect(() => {
-    axios.get("http://localhost:3331/MedicalEquipmentStock").then((result) => {
-      setFetchedData(result.data);
-    });
+    axios
+      .get("http://localhost:3331/MedicalEquipmentStock", {
+        withCredentials: true,
+      })
+      .then((result) => {
+        setFetchedData(result.data);
+      });
   }, [page]);
 
   const changeQty = (index, value) => {
@@ -2765,9 +2823,11 @@ function MissionFlightDetails(page) {
   }, [flightData]);
 
   useEffect(() => {
-    axios.get("http://localhost:3331/planes/getName").then((result) => {
-      setFetchedData(result.data);
-    });
+    axios
+      .get("http://localhost:3331/planes/getName", { withCredentials: true })
+      .then((result) => {
+        setFetchedData(result.data);
+      });
   }, [page]);
 
   useEffect(() => {
@@ -2994,7 +3054,8 @@ function MissionSummaryPage(page) {
             {
               quantity: value.qty,
               flightNumber: flightInfo.flightNumber,
-            }
+            },
+            { withCredentials: true }
           )
           .then((result) => {})
           .catch((e) => {});
@@ -3013,7 +3074,8 @@ function MissionSummaryPage(page) {
             {
               quantity: value.qty,
               flightNumber: flightInfo.flightNumber,
-            }
+            },
+            { withCredentials: true }
           )
           .then((result) => {})
           .catch((e) => {});
@@ -3027,9 +3089,13 @@ function MissionSummaryPage(page) {
     setLoading(true);
     const stringifiedData = JSON.stringify(missionState);
     axios
-      .post("http://localhost:3331/Missions/NewMission", {
-        data: stringifiedData,
-      })
+      .post(
+        "http://localhost:3331/Missions/NewMission",
+        {
+          data: stringifiedData,
+        },
+        { withCredentials: true }
+      )
       .then((result) => {
         DrugExits(missionState.drugs, missionState.flightInfo);
         MedicalEquipmentExits(missionState.equipment, missionState.flightInfo);
@@ -3166,7 +3232,11 @@ export function ViewMissionModalSummary({
   const changeMissionStatus = (id) => {
     setLoading(true);
     axios
-      .put(`http://localhost:3331/missions/updateMissionStatus/${id}`)
+      .put(`http://localhost:3331/missions/updateMissionStatus/${id}`, {
+        withCredentials: true,
+        path: "/",
+        domain: "localhost",
+      })
       .then((result) => {
         setTimeout(() => {
           setLoading(false);
@@ -3178,12 +3248,13 @@ export function ViewMissionModalSummary({
         }, 2000);
       })
       .catch((e) => {
+        console.log(e);
         setTimeout(() => {
           setLoading(false);
           setStatusError(true);
           setTimeout(() => {
             setStatusError(false);
-            location.reload();
+            // location.reload();
           }, 3000);
         }, 2000);
       });

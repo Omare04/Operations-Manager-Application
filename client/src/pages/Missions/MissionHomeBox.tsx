@@ -11,7 +11,7 @@ const Grid = styled.div`
 `;
 
 export function MissionHomeBox() {
-  axios.get("http://localhost:3331/");
+  axios.get("http://localhost:3331/", {withCredentials: true});
   return (
     <>
       <Grid>
@@ -37,7 +37,7 @@ export function MedicalEquipmentBox({ flightNum }) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3331/Missions/${flightNum}`)
+      .get(`http://localhost:3331/Missions/${flightNum}`,{withCredentials: true})
       .then((result) => {
         setData(result.data);
       })

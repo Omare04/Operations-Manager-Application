@@ -1,14 +1,35 @@
 import express from "express";
 import mysql from "mysql2";
-// import MedicalEquipmentParsed from "../StockDataFiles/MedicalEquipmentParsed.json" assert { type: "json" };
+import { userAuthMiddleWare } from "./users.js";
+import cors from "cors";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
 
-const MedEquipmentRouter = express.Router();
+const MedEquipmentRouter = express();
+
+MedEquipmentRouter.use(userAuthMiddleWare);
 
 const dbport = 3301;
 const dbhost = "localhost";
 const dbname = "Stock_AOM";
 const dbuser = "root";
 const dbpass = " ";
+
+MedEquipmentRouter.use(bodyParser.urlencoded({ extended: true }));
+
+//this configures our environment file .env
+MedEquipmentRouter.use(cookieParser());
+dotenv.config();
+MedEquipmentRouter.use(bodyParser.json());
+
+MedEquipmentRouter.use(
+  cors({
+    origin: "http://localhost:5173",
+    method: ["GET", "POST", "PUT"],
+    credentials: true,
+  })
+);
 
 const pool = mysql.createPool({
   host: dbhost,
@@ -106,7 +127,7 @@ MedEquipmentRouter.route("/EditItems/:ID").put((req, res) => {
 MedEquipmentRouter.route("/ERHistory").get((req, res) => {
   //do inner joins for user and product.
   const query =
-    'SELECT fname, lname, product_name, ExitEntryMedEquipment.quantity, type, DATE_FORMAT(added_at, "%Y-%m-%d") AS FormattedDate \
+    'SELECT fname, lname, product_name, ExitEntryMedEquipment.quantity, type,flight_num ,DATE_FORMAT(added_at, "%Y-%m-%d") AS FormattedDate \
   FROM ExitEntryMedEquipment\
   INNER JOIN users ON users.id = ExitEntryMedEquipment.uid\
   INNER JOIN MedicalEquipmentStock ON MedicalEquipmentStock.product_id = ExitEntryMedEquipment.product_id;';

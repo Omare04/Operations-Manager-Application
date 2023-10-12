@@ -93,7 +93,7 @@ const StyledChartTitle = styled.div`
   grid-row: 1;
   grid-column: 1;
   width: 100%;
-  background-image: linear-gradient(to right, #0080ff , #095df0);
+  background-image: linear-gradient(to right, #0080ff, #095df0);
   color: white;
   border: 1px solid #bebebe;
   border-radius: 2px;
@@ -106,20 +106,18 @@ const StyledSupplierChartTitle = styled.div`
   grid-row: 1;
   grid-column: 1/4;
   width: 100%;
-  background-image: linear-gradient(to right, #0080ff , #095df0);
+  background-image: linear-gradient(to right, #0080ff, #095df0);
   color: white;
   border: 1px solid #bebebe;
   border-radius: 2px;
 `;
 
 const ColorWrapper = styled.div`
-background-image: linear-gradient( #f5f5f5, #515151b9);
-  /* border-top: 2px solid #378638; */
+  background-image: linear-gradient(#f5f5f5, #515151b9);
   height: 100vh;
   width: 100%;
   grid-row: 1/3;
   grid-column: 1/4;
-  /* z-index: 0;  */
 `;
 
 const BackgroundWrapper = styled.div`
@@ -138,11 +136,11 @@ function Home() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3331/Maintanance_stock/TotalStock")
+      .get("http://localhost:3331/Maintanance_stock/TotalStock", {withCredentials: true})
       .then((result) => {
         setMaintenanceStock(result.data[0].total);
       });
-    axios.get("http://localhost:3331/Med_stock/TotalStock").then((result) => {
+    axios.get("http://localhost:3331/Med_stock/TotalStock", {withCredentials: true}).then((result) => {
       setMedicalStock(result.data[0].total);
     });
   }, [maintenanceStock, medicalStock]);

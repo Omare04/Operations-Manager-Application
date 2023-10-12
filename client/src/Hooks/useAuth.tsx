@@ -51,7 +51,7 @@ export const useAuthWrapper = () => {
       .post("http://localhost:3331/users/login", {
         email: email,
         password: pass,
-      })
+      }, {withCredentials: true})
       .then((res) => {
         //This returns the boolean from the backend which is the object sent from the backend.
         if (res.data.loggedIn) {

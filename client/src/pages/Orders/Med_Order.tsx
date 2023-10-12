@@ -127,7 +127,7 @@ function Orderdetails() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3331/orders/DrugOrder/NumOfOrders")
+      .get("http://localhost:3331/orders/DrugOrder/NumOfOrders", {withCredentials: true})
       .then((res) => {
         setNumOfOrders(res.data);
       })
@@ -275,7 +275,7 @@ function Add() {
     const parsedData = JSON.parse(data);
 
     axios
-      .get(`http://localhost:3331/users/${orderInfo.uid}`)
+      .get(`http://localhost:3331/users/${orderInfo.uid}`, {withCredentials: true})
       .then((response) => {
         axios
         .get("http://localhost:3331/Services/pdfRoute", {
@@ -286,14 +286,14 @@ function Add() {
             user: response.data,
           },
           responseType: "blob",
-        })
+        }, {withCredentials: true})
         .then((res) => {
           downloadPdf(neworder[0].PO, res.data);
           axios
             .post("http://localhost:3331/Orders/DrugOrder", {
               neworder,
               orderInfo,
-            })
+            }, {withCredentials: true})
             .then((result) => {
               const alert = setAlertState(true);
             })

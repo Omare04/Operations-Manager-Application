@@ -75,7 +75,7 @@ function Suppliers() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3331/Supplier")
+      .get("http://localhost:3331/Supplier", {withCredentials: true})
       .then((result) => {
         setData(result.data);
         setLoading(false);
@@ -224,7 +224,7 @@ export function SupplierStatsGraph() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3331/Supplier/SupplierStats/28")
+      .get("http://localhost:3331/Supplier/SupplierStats/28", {withCredentials: true})
       .then((result) => {
         setData(result.data);
       })

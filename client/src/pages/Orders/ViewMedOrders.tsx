@@ -166,7 +166,7 @@ export default function ViewMedOrders() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3331/Orders/ActiveCount`)
+      .get(`http://localhost:3331/Orders/ActiveCount`, {withCredentials: true})
       .then((result) => {
         setActiveOrders(result.data.payload);
       })
@@ -184,7 +184,7 @@ export default function ViewMedOrders() {
   useEffect(() => {
     if (orderDetails != {} && orderDetails) {
       axios
-        .get(`http://localhost:3331/Orders/ExportMedPO/${orderDetails.PO}`)
+        .get(`http://localhost:3331/Orders/ExportMedPO/${orderDetails.PO}`, {withCredentials: true})
         .then((result) => {
           setpdfTableData(result.data.payload);
         })
@@ -216,7 +216,7 @@ export default function ViewMedOrders() {
             title: "AOM Air Ambulance",
           },
           responseType: "blob",
-        })
+        }, {withCredentials: true})
         .then((result) => {
           downloadPdf(pdfData[0].PO, result.data);
         });
@@ -293,7 +293,7 @@ export function OrderSummaryBox({
       setLoading(true);
       setCircularProgressLoading(true);
       axios
-        .put(`http://localhost:3331/Orders/${route}/${PO}/${status}`)
+        .put(`http://localhost:3331/Orders/${route}/${PO}/${status}`, {withCredentials: true})
         .then((result) => {
           setTimeout(() => {
             setCircularProgressLoading(false);

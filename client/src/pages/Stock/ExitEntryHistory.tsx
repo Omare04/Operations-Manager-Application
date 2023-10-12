@@ -59,7 +59,7 @@ export default function ExitEntryHistory() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    axios.get("http://localhost:3331/Med_stock/History").then((result) => {
+    axios.get("http://localhost:3331/Med_stock/History", {withCredentials: true}).then((result) => {
       setData(result.data);
     });
   }, []);
@@ -114,7 +114,7 @@ export default function ExitEntryHistory() {
     ];
 
     axios
-      .get(`http://localhost:3331/Med_stock/EntryExit/${type}`)
+      .get(`http://localhost:3331/Med_stock/EntryExit/${type}`, {withCredentials: true})
       .then((res) => {
         axios
           .get("http://localhost:3331/Services/generateTableRoute/EntryExit", {
@@ -136,6 +136,7 @@ export default function ExitEntryHistory() {
                   : "Medical Stock Removals",
             },
             responseType: "blob",
+            withCredentials: true
           })
           .then((pdf) => {
             if (type == "Remove") {

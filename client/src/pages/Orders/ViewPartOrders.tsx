@@ -18,7 +18,6 @@ const Grid = styled.div`
   height: 100vh;
 `;
 
-
 const TableWrap = styled.div`
   display: grid;
   grid-row: 2/3;
@@ -34,7 +33,7 @@ const StyledHeader = styled.div`
   grid-column: 1/7;
   grid-row: 1;
   color: white;
-  background-image: linear-gradient(to right, #0080ff , #095df0);
+  background-image: linear-gradient(to right, #0080ff, #095df0);
   border: 1px solid #bebebe;
   height: 50px;
   border-radius: 5px;
@@ -51,18 +50,16 @@ const StyledTableHeader = styled.div`
   height: 40px;
   align-items: center;
   border-radius: 3px;
-  `;
-  
-  const user = [
-    {
-      email: "t.elmasaoudi@gmail.com",
-      phoneNumber: "+212 6 61 50 67 83",
-      fname: "Tarik",
-      lname: "El masaoudi",
-    },
-  ];
+`;
 
-  
+const user = [
+  {
+    email: "t.elmasaoudi@gmail.com",
+    phoneNumber: "+212 6 61 50 67 83",
+    fname: "Tarik",
+    lname: "El masaoudi",
+  },
+];
 
 export default function ViewPartOrders() {
   const [activeOrders, setActiveOrders] = useState(null);
@@ -75,14 +72,14 @@ export default function ViewPartOrders() {
     table_height: "500px",
     subMenuRoute: "MaintenanceView",
     editRoute: "EditPartOrder",
-    deleteRoute: "DeletePartItem"
+    deleteRoute: "DeletePartItem",
   });
-
-
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3331/Orders/ActiveCount`)
+      .get(`http://localhost:3331/Orders/ActiveCount`, {
+        withCredentials: true,
+      })
       .then((result) => {
         setActiveOrders(result.data.payload);
       })
@@ -101,7 +98,9 @@ export default function ViewPartOrders() {
     if (orderDetails && activeOrders != null) {
       // Make sure orderDetails is not null or undefined
       axios
-        .get(`http://localhost:3331/Orders/ExportPartPO/${orderDetails.PO}`)
+        .get(`http://localhost:3331/Orders/ExportPartPO/${orderDetails.PO}`, {
+          withCredentials: true,
+        })
         .then((result) => {
           if (result.data && result.data.length > 0) {
             // Check if result.data is not empty
@@ -134,6 +133,7 @@ export default function ViewPartOrders() {
           Supplier: supplierDetails[0],
         },
         responseType: "blob",
+        withCredentials: true,
       })
       .then((result) => {
         downloadPdf(pdfTableData[0].PO, result.data);

@@ -135,7 +135,7 @@ export function Orderdetails() {
   const [values, setValues] = useState([]);
   useEffect(() => {
     axios
-      .get("http://localhost:3331/Maintanance_stock")
+      .get("http://localhost:3331/Maintanance_stock", {withCredentials: true})
       .then((result) => {
         setValues(result.data);
       })
@@ -155,7 +155,7 @@ export function Orderdetails() {
   const [partNumber, setPartNumber] = useState([]);
   useEffect(() => {
     axios
-      .get("http://localhost:3331/Maintanance_stock/pn")
+      .get("http://localhost:3331/Maintanance_stock/pn", {withCredentials: true})
       .then((result) => {
         setPartNumber(result.data);
       })
@@ -203,7 +203,7 @@ export function Orderdetails() {
   useEffect(() => {
     if (part_number.selectedValue != undefined) {
       axios
-        .get(`http://localhost:3331/Maintanance_stock/MatchItemPn/${pn}`)
+        .get(`http://localhost:3331/Maintanance_stock/MatchItemPn/${pn}`), {withCredentials: true}
         .then((result) => {
           setProductNameMatch(result.data[0].product_name);
         })
@@ -214,7 +214,7 @@ export function Orderdetails() {
   useEffect(() => {
     if (productNameMatch) {
       axios
-        .get(`http://localhost:3331/planes/PartMatch/${productNameMatch}`)
+        .get(`http://localhost:3331/planes/PartMatch/${productNameMatch}`, {withCredentials: true})
         .then((res) => {
           const { data } = res;
           if (data && data.length > 0) {
@@ -280,7 +280,7 @@ function Supplierdetails() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3331/orders/Parts/numOfOrders")
+      .get("http://localhost:3331/orders/Parts/numOfOrders", {withCredentials: true})
       .then((res) => {
         setNumOfOrders(res.data);
       })
@@ -320,7 +320,7 @@ function Supplierdetails() {
   useEffect(() => {
     if (dropdown.selectedValue !== null) {
       axios
-        .get(`http://localhost:3331/Supplier/Match/${dropdown.selectedValue}`)
+        .get(`http://localhost:3331/Supplier/Match/${dropdown.selectedValue}`, {withCredentials: true})
         .then((result) => {
           console.log(result.data.Supplier_id);
           setSupplierId(result.data.Supplier_id);
@@ -498,10 +498,10 @@ function Add() {
       setLoading(true);
     setCircularProgressLoading(true);
     axios
-      .get(`http://localhost:3331/users/1684438791`)
+      .get(`http://localhost:3331/users/1684438791`, {withCredentials: true})
       .then((responseUser) => {
         axios
-          .get(`http://localhost:3331/Supplier/${neworder[0].Supplier}`)
+          .get(`http://localhost:3331/Supplier/${neworder[0].Supplier}`, {withCredentials: true})
           .then((responseSupplier) => {
             console.log(responseSupplier.data);
             axios
@@ -513,13 +513,13 @@ function Add() {
                   Supplier: responseSupplier.data[0],
                 },
                 responseType: "blob",
-              })
+              }, {withCredentials: true})
               .then((res) => {
                 downloadPdf(supplier.Ordercode, res.data);
                 axios
                   .post("http://localhost:3331/Orders/PartOrder", {
                     data: neworder,
-                  })
+                  }, {withCredentials: true})
                   .then((result) => {
                     setTimeout(() => {
                       setCircularProgressLoading(false);
