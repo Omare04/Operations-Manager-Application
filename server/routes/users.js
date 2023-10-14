@@ -230,7 +230,7 @@ router.route("/login").post((req, res) => {
             httpOnly: true,
           });
           res.cookie("tokenId", tokenId, {
-            httpOnly: false,
+            httpOnly: true,
           });
 
           // This function sets the users refresh token accompanied with the users id into the database
