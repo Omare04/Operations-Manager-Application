@@ -32,7 +32,6 @@ const StyledTableContainer = styled.div`
   border-collapse: collapse;
   grid-column: 1/6;
   grid-row: 2/3;
-  border: 1px solid #aeaeae82;
 `;
 
 const StyledTable = styled.table`
@@ -115,8 +114,8 @@ const StyledSearchBox = styled.div`
 const StyledSearch = styled.input`
   outline: none;
   border: 1px solid #cfcfcf7b;
-  border-right: 0px; 
-  width: 100%; 
+  border-right: 0px;
+  width: 100%;
   font-size: 14.9px;
   padding-left: 15px;
   color: #434343;
@@ -452,7 +451,6 @@ export function TableStatic({ arr, headers, td, dropdown, ordertable }) {
               {headers.map((data) => (
                 <StyledTableHeading key={data}>{data}</StyledTableHeading>
               ))}
-              <StyledTableHeading></StyledTableHeading>
             </StyledTableRows>
 
             {array.map((data, index) => (
@@ -678,11 +676,18 @@ const StyledEditIcons = styled.div`
   }
 `;
 
-const StyledNoOrderMessage = styled.p`
+const StyledNoOrderMessage = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  font-style: italic;
+
   color: #a7a7a7;
   font-size: 50px;
-  padding-top: 90px;
-  padding-left: 300px;
+  /* padding-top: 90px; */
+  /* padding-left: 300px; */
 `;
 
 //Table that maps through the orders and allows editing and deleting of order items.
@@ -717,7 +722,8 @@ export function OrderTable({ route, table_height, subMenuRoute, deleteRoute }) {
     axios
       .delete(`http://localhost:3331/Orders/${deleteRoute}/${item.order_id}`, {
         params: { PO: item.PO, product: item.product_name },
-      }, {withCredentials: true})
+        withCredentials: true, 
+      })
       .then((result) => {
         alert(result.data.message);
         location.reload();
@@ -816,14 +822,14 @@ export function OrderTable({ route, table_height, subMenuRoute, deleteRoute }) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3331/${route}`, {withCredentials: true})
+      .get(`http://localhost:3331/${route}`, { withCredentials: true })
       .then((payload) => {
         setData(payload.data);
       })
       .catch((e) => {
         // console.log(e);
       });
-  }, [route]); // Include 'route' in the dependency array to re-fetch data when the route changes
+  }, [route]); 
 
   const handleDropdownClick = (index) => {
     //When the openRow eqauls the index then the submenu is opened else its closed.
@@ -845,7 +851,8 @@ export function OrderTable({ route, table_height, subMenuRoute, deleteRoute }) {
     if (indexState != null) {
       axios
         .get(
-          `http://localhost:3331/Orders/${subMenuRoute}/${data[indexState].PO}`, {withCredentials: true}
+          `http://localhost:3331/Orders/${subMenuRoute}/${data[indexState].PO}`,
+          { withCredentials: true }
         )
         .then((result) => {
           setOrderDetails(result.data);

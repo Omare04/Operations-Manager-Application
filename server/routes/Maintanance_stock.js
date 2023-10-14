@@ -22,10 +22,12 @@ const dbpass = " ";
 MaintenanceStock.use(
   cors({
     origin: "http://localhost:5173",
-    method: ["GET", "POST", "PUT"],
     credentials: true,
+    method: ["GET", "POST", "PUT", "DELETE"],
   })
 );
+
+MaintenanceStock.use(userAuthMiddleWare);
 
 const pool = mysql.createPool({
   host: dbhost,
@@ -34,8 +36,6 @@ const pool = mysql.createPool({
   database: dbname,
   dbpass: dbpass,
 });
-
-MaintenanceStock.use(userAuthMiddleWare);
 
 MaintenanceStock.route("/")
   .get((req, res) => {

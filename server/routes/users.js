@@ -36,7 +36,7 @@ const pool = mysql.createPool({
 router.use(
   cors({
     origin: "http://localhost:5173",
-    method: ["GET", "POST", "PUT"],
+    method: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
@@ -159,6 +159,8 @@ router
       const email = req.body.email;
       const password = req.body.password;
       const position = req.body.position;
+
+      console.log(fname);
 
       const salt = await bcrypt.genSalt();
       const hashedPassword = await bcrypt.hash(password, salt);
@@ -468,6 +470,7 @@ export function userAuthMiddleWare(req, res, next) {
   //Figure how to retrieve the cookies from the http cookies when activating the middleware.
 
   if (tokenId === null || tokenId === undefined) {
+    console.log(tokenId);
     return res
       .cookie("accessToken", "", {
         path: "/",

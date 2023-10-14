@@ -34,7 +34,8 @@ const Grid = styled.div`
 `;
 
 const StyledOrderdetailbox = styled.div`
-  display: grid;
+  display: flex;
+  flex-direction: column;
   grid-template-columns: repeat(1, 1fr);
   grid-template-rows: 0.5fr 1fr 1fr 1fr;
   background: #ffffff;
@@ -127,7 +128,9 @@ function Orderdetails() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3331/orders/DrugOrder/NumOfOrders", {withCredentials: true})
+      .get("http://localhost:3331/orders/DrugOrder/NumOfOrders", {
+        withCredentials: true,
+      })
       .then((res) => {
         setNumOfOrders(res.data);
       })
@@ -256,7 +259,7 @@ function Add() {
 
   function successAlert(PO) {
     return (
-      <Stack sx={{ width: "100%" }} spacing={2} gridColumn={1} paddingTop= {2}>
+      <Stack sx={{ width: "100%" }} spacing={2} gridColumn={1} paddingTop={2}>
         <Alert
           onClose={() => {
             setAlertState(false);
@@ -270,68 +273,86 @@ function Add() {
   }
 
   function handleSubmitOrder() {
-
     const data = localStorage.getItem("Orders_info");
     const parsedData = JSON.parse(data);
 
-    axios
-      .get(`http://localhost:3331/users/${orderInfo.uid}`, {withCredentials: true})
-      .then((response) => {
-        axios
-        .get("http://localhost:3331/Services/pdfRoute", {
-          params: {
-            type: "Medicine",
-            item: JSON.stringify(neworder),
-            info: JSON.stringify(orderInfo),
-            user: response.data,
-          },
-          responseType: "blob",
-        }, {withCredentials: true})
-        .then((res) => {
-          downloadPdf(neworder[0].PO, res.data);
+    if (neworder.length > 0) {
+      axios
+        .get(`http://localhost:3331/users/${orderInfo.uid}`, {
+          withCredentials: true,
+        })
+        .then((response) => {
           axios
-            .post("http://localhost:3331/Orders/DrugOrder", {
-              neworder,
-              orderInfo,
-            }, {withCredentials: true})
-            .then((result) => {
-              const alert = setAlertState(true);
+            .get("http://localhost:3331/Services/pdfRoute", {
+              params: {
+                type: "Medicine",
+                item: JSON.stringify(neworder),
+                info: JSON.stringify(orderInfo),
+                user: response.data,
+              },
+              responseType: "blob",
+              withCredentials: true,
+            })
+            .then((res) => {
+              downloadPdf(neworder[0].PO, res.data);
+              axios
+                .post(
+                  "http://localhost:3331/Orders/DrugOrder",
+                  {
+                    neworder,
+                    orderInfo,
+                  },
+                  { withCredentials: true }
+                )
+                .then((result) => {
+                  const alert = setAlertState(true);
+                })
+                .catch((e) => {
+                  console.log(e.message);
+                });
             })
             .catch((e) => {
-              console.log(e.message);
+              console.log(e);
             });
         })
-        .catch((e) => {
-          console.log(e);
+        .catch((error) => {
+          console.log(error);
         });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
+    } else {
+      alert("Please Add Items To The Order");
+    }
   }
 
   return (
     <>
-        {alertState ? successAlert(neworder[0].PO) : null}
+      {alertState ? successAlert(neworder[0].PO) : null}
       <Grid>
         {orderDetails.render}
         <StyledButtonbox>
           <ButtonComponent
             type="Add"
-            onClickFunction={() =>
-              addOrder(
-                orderDetails.dropdownValue,
-                orderDetails.dropdownValueStatic,
-                orderDetails.quantity,
-                orderDetails.numOfOrders,
-                orderDetails.inputValue
-              )
-            }
+            onClickFunction={() => {
+              if (
+                Sanitize(
+                  orderDetails.quantity,
+                  orderDetails.dropdownValue,
+                  orderDetails.dropdownValueStatic
+                )
+              ) {
+                addOrder(
+                  orderDetails.dropdownValue,
+                  orderDetails.dropdownValueStatic,
+                  orderDetails.quantity,
+                  orderDetails.numOfOrders,
+                  orderDetails.inputValue
+                );
+              } else {
+                alert("Please Enter All Fields");
+              }
+            }}
             row={null}
             col={2}
           />
-          {/*row attribute needs to be changed, determine wether null or 1.*/}
           <ButtonComponent
             type="Reset"
             row={null}

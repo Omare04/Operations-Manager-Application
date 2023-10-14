@@ -29,44 +29,49 @@ export const MedOrder = express.Router();
 export const DrugOrder = express.Router();
 export const PartOrder = express.Router();
 
+DrugOrder.use(cookieParser());
+DrugOrder.use(bodyParser.urlencoded({ extended: true }));
+dotenv.config();
+DrugOrder.use(bodyParser.json());
+
+PartOrder.use(cookieParser());
+PartOrder.use(bodyParser.urlencoded({ extended: true }));
+dotenv.config();
+PartOrder.use(bodyParser.json());
+
 MedOrder.use(cookieParser());
 MedOrder.use(userAuthMiddleWare);
 MedOrder.use(bodyParser.urlencoded({ extended: true }));
 dotenv.config();
 MedOrder.use(bodyParser.json());
+
 MedOrder.use(
   cors({
     origin: "http://localhost:5173",
-    method: ["GET", "POST", "PUT"],
     credentials: true,
+    method: ["GET", "POST", "PUT", "DELETE"],
   })
 );
 
-DrugOrder.use(cookieParser());
-DrugOrder.use(userAuthMiddleWare);
-DrugOrder.use(bodyParser.urlencoded({ extended: true }));
-dotenv.config();
-DrugOrder.use(bodyParser.json());
 DrugOrder.use(
   cors({
     origin: "http://localhost:5173",
-    methods: ["GET", "POST"],
     credentials: true,
+    method: ["GET", "POST", "PUT", "DELETE"],
   })
 );
 
-PartOrder.use(cookieParser());
-PartOrder.use(userAuthMiddleWare);
-PartOrder.use(bodyParser.urlencoded({ extended: true }));
-dotenv.config();
-PartOrder.use(bodyParser.json());
 PartOrder.use(
   cors({
     origin: "http://localhost:5173",
-    methods: ["GET", "POST"],
     credentials: true,
+    method: ["GET", "POST", "PUT", "DELETE"],
   })
 );
+
+PartOrder.use(userAuthMiddleWare);
+DrugOrder.use(userAuthMiddleWare);
+MedOrder.use(userAuthMiddleWare);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -6,11 +6,6 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 
-const app = express();
-const port = 3000;
-
-app.use(express.json());
-
 const dbport = 3301;
 const dbhost = "localhost";
 const dbname = "Stock_AOM";
@@ -35,13 +30,18 @@ MissionRouter.use(cookieParser());
 MissionRouter.use(bodyParser.urlencoded({ extended: true }));
 dotenv.config();
 MissionRouter.use(bodyParser.json());
+
 MissionRouter.use(
   cors({
     origin: "http://localhost:5173",
-    methods: ["GET", "POST", "PUT"],
+    method: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
+
+
+//Figure out why this is happening for the update route, CORS config maybe ? put request maybe 
+//Changing it doesnt do anything so maybe an issue on the client side ? 
 
 MissionRouter.use(userAuthMiddleWare);
 
@@ -56,6 +56,8 @@ MissionRouter.route("/updateMissionStatus/:ID").put((req, res) => {
     }
   });
 });
+
+
 
 MissionRouter.route("/FlightsPerPlane").get((req, res) => {
   const query = "SELECT mission_data FROM missions";

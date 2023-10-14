@@ -30,10 +30,7 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import InputAdornment from "@mui/material/InputAdornment";
-import { useField } from "@mui/x-date-pickers/internals";
 import { MissionSummaryToggleList } from "../Missions/MissionsLists";
-import { domainToASCII } from "url";
-import { AutoFixHighOutlined, DataUsage } from "@mui/icons-material";
 
 const Wrapper = styled.div`
   background-color: red;
@@ -414,7 +411,7 @@ export function AddMaintenanceStockModal({ open, onClose }) {
       },
       { withCredentials: true }
     );
-  }, []);
+  }, [values]);
 
   const productTypes = [
     "Piece Avion",
@@ -2796,7 +2793,7 @@ const StyledFlightInfoWrapper = styled.div`
 `;
 
 function MissionFlightDetails(page) {
-  const [fectchedData, setFetchedData] = useState([{}]);
+  const [fetchedData, setFetchedData] = useState([{}]);
   const [flightData, setFlightData] = useState({
     plane: "",
     flightNumber: "",
@@ -2810,7 +2807,7 @@ function MissionFlightDetails(page) {
     React.useContext(missionDataContext);
 
   const asyncSelect = DynamicaDropDownComp({
-    options: fectchedData,
+    options: fetchedData,
     optionsName: "call_sign",
     ItemId: "call_sign",
     placeholderText: "Plane",
@@ -2828,7 +2825,7 @@ function MissionFlightDetails(page) {
       .then((result) => {
         setFetchedData(result.data);
       });
-  }, [page]);
+  }, []);
 
   useEffect(() => {
     setMissionState((prevState) => ({
@@ -3229,13 +3226,12 @@ export function ViewMissionModalSummary({
   const [statusSuccess, setStatusSuccess] = useState(false);
   const [statusError, setStatusError] = useState(false);
 
+  //ISSUE here with the middleware.
   const changeMissionStatus = (id) => {
     setLoading(true);
     axios
-      .put(`http://localhost:3331/missions/updateMissionStatus/${id}`, {
+      .put(`http://localhost:3331/missions/updateMissionStatus/${id}`, null, {
         withCredentials: true,
-        path: "/",
-        domain: "localhost",
       })
       .then((result) => {
         setTimeout(() => {

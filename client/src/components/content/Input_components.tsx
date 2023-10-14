@@ -134,7 +134,6 @@ export function DropDownCompStatic({ title, row, col, arr, placeholderprop }) {
 const StyledAsyncSelect = styled(AsyncSelect)`
   position: absolute;
   width: 100%;
-  z-index: 9999;
   border-radius: 0px;
 `;
 
@@ -349,7 +348,8 @@ const Styledincrementer = styled.input`
   }
 `;
 
-const IncrementerContainer = styled.div``;
+const IncrementerContainer = styled.div`
+width: 100%; `;
 
 export function IncrementerComp({ title, row, col }) {
   const [val, setval] = useState(0);

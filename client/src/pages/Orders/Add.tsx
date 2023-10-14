@@ -31,9 +31,9 @@ const Grid = styled.div`
 `;
 
 const StyledOrderdetailbox = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: 0.5fr 1fr 1fr 2fr;
+  display:flex; 
+  justify-content: space-between; 
+  flex-direction: column;
   background: #ffffff;
   border: 2px solid #f4f4f4;
   grid-column: 1/2;
@@ -135,7 +135,7 @@ export function Orderdetails() {
   const [values, setValues] = useState([]);
   useEffect(() => {
     axios
-      .get("http://localhost:3331/Maintanance_stock", {withCredentials: true})
+      .get("http://localhost:3331/Maintanance_stock", { withCredentials: true })
       .then((result) => {
         setValues(result.data);
       })
@@ -155,7 +155,9 @@ export function Orderdetails() {
   const [partNumber, setPartNumber] = useState([]);
   useEffect(() => {
     axios
-      .get("http://localhost:3331/Maintanance_stock/pn", {withCredentials: true})
+      .get("http://localhost:3331/Maintanance_stock/pn", {
+        withCredentials: true,
+      })
       .then((result) => {
         setPartNumber(result.data);
       })
@@ -167,6 +169,7 @@ export function Orderdetails() {
   const part_number = DynamicaDropDownComp({
     options: partNumber,
     optionsName: "part_number",
+    ItemId: "part_number",
     placeholderText: "Select P/N",
     initialVal: null,
     disabledToF: false,
@@ -203,18 +206,24 @@ export function Orderdetails() {
   useEffect(() => {
     if (part_number.selectedValue != undefined) {
       axios
-        .get(`http://localhost:3331/Maintanance_stock/MatchItemPn/${pn}`), {withCredentials: true}
+        .get(`http://localhost:3331/Maintanance_stock/MatchItemPn/${pn}`, {
+          withCredentials: true,
+        })
         .then((result) => {
           setProductNameMatch(result.data[0].product_name);
         })
-        .catch((e) => {});
+        .catch((e) => {
+          // Handle errors here if needed
+        });
     }
   }, [part_number.selectedValue]);
 
   useEffect(() => {
     if (productNameMatch) {
       axios
-        .get(`http://localhost:3331/planes/PartMatch/${productNameMatch}`, {withCredentials: true})
+        .get(`http://localhost:3331/planes/PartMatch/${productNameMatch}`, {
+          withCredentials: true,
+        })
         .then((res) => {
           const { data } = res;
           if (data && data.length > 0) {
@@ -280,7 +289,9 @@ function Supplierdetails() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3331/orders/Parts/numOfOrders", {withCredentials: true})
+      .get("http://localhost:3331/orders/Parts/numOfOrders", {
+        withCredentials: true,
+      })
       .then((res) => {
         setNumOfOrders(res.data);
       })
@@ -320,7 +331,9 @@ function Supplierdetails() {
   useEffect(() => {
     if (dropdown.selectedValue !== null) {
       axios
-        .get(`http://localhost:3331/Supplier/Match/${dropdown.selectedValue}`, {withCredentials: true})
+        .get(`http://localhost:3331/Supplier/Match/${dropdown.selectedValue}`, {
+          withCredentials: true,
+        })
         .then((result) => {
           console.log(result.data.Supplier_id);
           setSupplierId(result.data.Supplier_id);
@@ -498,28 +511,38 @@ function Add() {
       setLoading(true);
     setCircularProgressLoading(true);
     axios
-      .get(`http://localhost:3331/users/1684438791`, {withCredentials: true})
+      .get(`http://localhost:3331/users/1684438791`, { withCredentials: true })
       .then((responseUser) => {
         axios
-          .get(`http://localhost:3331/Supplier/${neworder[0].Supplier}`, {withCredentials: true})
+          .get(`http://localhost:3331/Supplier/${neworder[0].Supplier}`, {
+            withCredentials: true,
+          })
           .then((responseSupplier) => {
             console.log(responseSupplier.data);
             axios
-              .get("http://localhost:3331/Services/pdfRoute", {
-                params: {
-                  type: "Maintenance",
-                  item: JSON.stringify(neworder),
-                  user: responseUser.data,
-                  Supplier: responseSupplier.data[0],
+              .get(
+                "http://localhost:3331/Services/pdfRoute",
+                {
+                  params: {
+                    type: "Maintenance",
+                    item: JSON.stringify(neworder),
+                    user: responseUser.data,
+                    Supplier: responseSupplier.data[0],
+                  },
+                  responseType: "blob",
                 },
-                responseType: "blob",
-              }, {withCredentials: true})
+                { withCredentials: true }
+              )
               .then((res) => {
                 downloadPdf(supplier.Ordercode, res.data);
                 axios
-                  .post("http://localhost:3331/Orders/PartOrder", {
-                    data: neworder,
-                  }, {withCredentials: true})
+                  .post(
+                    "http://localhost:3331/Orders/PartOrder",
+                    {
+                      data: neworder,
+                    },
+                    { withCredentials: true }
+                  )
                   .then((result) => {
                     setTimeout(() => {
                       setCircularProgressLoading(false);
@@ -605,14 +628,13 @@ function Orderlist({ arr }) {
     headers: [
       "PO",
       "Qty",
-      "UID",
       "Product",
       "Supplier",
       "P/N",
       "Plane",
       "Price",
       "Date",
-      "Status",
+      "Status"
     ],
     dropdown: false,
     ordertable: null,
