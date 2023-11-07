@@ -69,9 +69,47 @@ PartOrder.use(
   })
 );
 
-PartOrder.use(userAuthMiddleWare);
+// PartOrder.use(userAuthMiddleWare);
 DrugOrder.use(userAuthMiddleWare);
 MedOrder.use(userAuthMiddleWare);
+
+//ASYNC ISSUE WITH RETURN VALUE !!!!
+function generatePO(tableName) {
+  const currentDate = new Date();
+  const month = currentDate.getMonth() + 1;
+  const year = currentDate.getFullYear();
+  let numOfOrdersByMonth = 0;
+
+  console.log(month);
+  console.log(year);
+
+  const query = `SELECT COUNT(*) AS numOfOrdersByMonth FROM MaintenanceOrders WHERE YEAR(DateOrdered) = ${year} AND MONTH(DateOrdered) = ${month}`;
+
+  pool.query(query, (err, result) => {
+    if (result && result.length > 0) {
+      numOfOrdersByMonth = result[0].numOfOrdersByMonth;
+
+      console.log("This is the Year: " + year.toString().slice(2));
+      console.log("This is the Month: " + month.toString().padStart(2, "0"));
+
+      const poString = `PO${year.toString().slice(2)}${month
+        .toString()
+        .padStart(2, "0")}${numOfOrdersByMonth.toString().padStart(2, "0")}`;
+
+      return poString;
+    } else if (err) {
+      console.log(err);
+    }
+  });
+}
+
+PartOrder.route("/PO").post((req, res) => {
+  generatePO("MaintenanceOrders").then((result) => {
+    console.log(result.data);
+  });
+  console.log(generatePO("MaintenanceOrders"));
+  res.send(generatePO("MaintenanceOrders"));
+});
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -135,6 +135,7 @@ const StyledAsyncSelect = styled(AsyncSelect)`
   position: absolute;
   width: 100%;
   border-radius: 0px;
+  z-index: 1000;
 `;
 
 export function DynamicaDropDownComp({
@@ -349,7 +350,8 @@ const Styledincrementer = styled.input`
 `;
 
 const IncrementerContainer = styled.div`
-width: 100%; `;
+  width: 100%;
+`;
 
 export function IncrementerComp({ title, row, col }) {
   const [val, setval] = useState(0);
@@ -755,12 +757,12 @@ const LoginButtonWrap = styled.button`
   background-color: rgb(226 22 23);
   transition: box-shadow 0.2s ease-in-out;
   cursor: pointer;
-  
+
   &:hover {
     transition: background-color 0.2s ease-in-out;
     background-color: #c61100;
   }
-  
+
   &:active {
     background-color: #9b1408;
   }

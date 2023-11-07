@@ -6,8 +6,6 @@ import { ProtectedRoutes } from "./Helper/authWrapper";
 
 createRoot(document.getElementById("root") as HTMLElement).render(
   <BrowserRouter>
-    <React.StrictMode>
-        <App />
-    </React.StrictMode>
+    <App />
   </BrowserRouter>
 );

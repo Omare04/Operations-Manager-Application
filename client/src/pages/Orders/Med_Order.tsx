@@ -214,16 +214,9 @@ function Orderdetails() {
 
 function Add() {
   const orderDetails = Orderdetails();
-  const userSession = useContext(LoginContext);
-
-  const [user, setUser] = useState(null);
   const [neworder, setNewOrder] = useState([]);
   const [orderInfo, setOrderInfo] = useState({});
   const [alertState, setAlertState] = useState(false);
-
-  useEffect(() => {
-    if (userSession != null) console.log(userSession.id);
-  }, []);
 
   const Sanitize = (quantity, productName, productType) => {
     if (
@@ -273,6 +266,7 @@ function Add() {
   }
 
   function handleSubmitOrder() {
+    
     const data = localStorage.getItem("Orders_info");
     const parsedData = JSON.parse(data);
 

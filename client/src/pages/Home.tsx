@@ -135,15 +135,23 @@ function Home() {
   const [maintenanceStock, setMaintenanceStock] = useState(null);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3331/Maintanance_stock/TotalStock", {withCredentials: true})
-      .then((result) => {
-        setMaintenanceStock(result.data[0].total);
-      });
-    axios.get("http://localhost:3331/Med_stock/TotalStock", {withCredentials: true}).then((result) => {
-      setMedicalStock(result.data[0].total);
-    });
-  }, [maintenanceStock, medicalStock]);
+    if (!maintenanceStock)
+      axios
+        .get("http://localhost:3331/Maintanance_stock/TotalStock", {
+          withCredentials: true,
+        })
+        .then((result) => {
+          setMaintenanceStock(result.data[0].total);
+        });
+    if (!medicalStock)
+      axios
+        .get("http://localhost:3331/Med_stock/TotalStock", {
+          withCredentials: true,
+        })
+        .then((result) => {
+          setMedicalStock(result.data[0].total);
+        });
+  }, []);
 
   return (
     <>

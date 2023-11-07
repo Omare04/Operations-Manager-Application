@@ -4,7 +4,11 @@ import styled from "styled-components";
 import NavBar from "./NavBar";
 import * as FaIcons from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { SidebarDataMaintenance, MedicalSidebarData } from "./SidebarData";
+import {
+  SidebarDataMaintenance,
+  MedicalSidebarData,
+  MedicalSidebarDataRestricted,
+} from "./SidebarData";
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Popper from "@mui/material/Popper";
@@ -173,7 +177,7 @@ const Styledarrow = styled.div`
   }
 `;
 
-function Layout({ children }) {
+function Layout({ children, position }) {
   const [sidebar, setSidebar] = useState(true);
   const [maintenanceSubmenuIndex, setMaintenanceSubmenuIndex] = useState(-1);
   const [medicalSubmenuIndex, setMedicalSubmenuIndex] = useState(-1);
@@ -224,47 +228,93 @@ function Layout({ children }) {
           )}
         </StyledNav>
         <GridNavItemsWrap>
-          {sidebar ? <Styleditemtitles>Maintenance</Styleditemtitles> : null}
-          {SidebarDataMaintenance.map((item, index) => (
-            <React.Fragment key={item.title}>
-              <Link to={item.route} style={{ textDecoration: "none" }}>
-                <GridNavItems>
-                  <StyledIcons sidebar={sidebar}>{item.icon}</StyledIcons>
-                  <StyledListitems sidebar={sidebar}>
-                    {item.title}
-                  </StyledListitems>
-                  {sidebar && item.Submenu ? (
-                    <Styledarrow
-                      onClick={() => toggleMaintenanceSubmenu(index)}
-                    >
-                      {item.arrow}
-                    </Styledarrow>
-                  ) : null}
-                </GridNavItems>
-              </Link>
-              {index === maintenanceSubmenuIndex &&
-                item.Submenu &&
-                item.Submenu.map((data) => (
-                  <Link
-                    to={data.route}
-                    key={data.title}
-                    style={{ textDecoration: "none" }}
-                  >
-                    <GridNavItems style={{ background: "#3b3b3b" }}>
-                      <StyledIcons sidebar={sidebar}>{data.icon}</StyledIcons>
+          {position === "admin" ? (
+            <React.Fragment>
+              {sidebar ? (
+                <Styleditemtitles>Maintenance</Styleditemtitles>
+              ) : null}
+              {SidebarDataMaintenance.map((item, index) => (
+                <React.Fragment key={item.title}>
+                  <Link to={item.route} style={{ textDecoration: "none" }}>
+                    <GridNavItems>
+                      <StyledIcons sidebar={sidebar}>{item.icon}</StyledIcons>
                       <StyledListitems sidebar={sidebar}>
-                        {data.title}
+                        {item.title}
                       </StyledListitems>
+                      {sidebar && item.Submenu ? (
+                        <Styledarrow
+                          onClick={() => toggleMaintenanceSubmenu(index)}
+                        >
+                          {item.arrow}
+                        </Styledarrow>
+                      ) : null}
                     </GridNavItems>
                   </Link>
-                ))}
+                  {index === maintenanceSubmenuIndex &&
+                    item.Submenu &&
+                    item.Submenu.map((data) => (
+                      <Link
+                        to={data.route}
+                        key={data.title}
+                        style={{ textDecoration: "none" }}
+                      >
+                        <GridNavItems style={{ background: "#3b3b3b" }}>
+                          <StyledIcons sidebar={sidebar}>
+                            {data.icon}
+                          </StyledIcons>
+                          <StyledListitems sidebar={sidebar}>
+                            {data.title}
+                          </StyledListitems>
+                        </GridNavItems>
+                      </Link>
+                    ))}
+                </React.Fragment>
+              ))}
+              {sidebar ? <Styleditemtitles>Medical</Styleditemtitles> : null}
+
+              {MedicalSidebarData.map((item, index) => (
+                <React.Fragment key={item.title}>
+                  <Link to={item.route} style={{ textDecoration: "none" }}>
+                    <GridNavItems>
+                      <StyledIcons sidebar={sidebar}>{item.icon}</StyledIcons>
+                      <StyledListitems sidebar={sidebar}>
+                        {item.title}
+                      </StyledListitems>
+                      {sidebar && (
+                        <Styledarrow
+                          onClick={() => toggleMedicalSubmenu(index)}
+                        >
+                          {item.arrow}
+                        </Styledarrow>
+                      )}
+                    </GridNavItems>
+                  </Link>
+                  {index === medicalSubmenuIndex &&
+                    item.Submenu &&
+                    item.Submenu.map((data) => (
+                      <Link
+                        to={data.route}
+                        key={data.title}
+                        style={{ textDecoration: "none" }}
+                      >
+                        <GridNavItems style={{ background: "#3b3b3b" }}>
+                          <StyledIcons sidebar={sidebar}>
+                            {data.icon}
+                          </StyledIcons>
+                          <StyledListitems sidebar={sidebar}>
+                            {data.title}
+                          </StyledListitems>
+                        </GridNavItems>
+                      </Link>
+                    ))}
+                </React.Fragment>
+              ))}
             </React.Fragment>
-          ))}
+          ) : null}
 
           {sidebar ? <Styleditemtitles>Medical</Styleditemtitles> : null}
 
-          {/* here is where you can conditionally render the sidebarDate and the restrict routes based on the users role  */}
-          {MedicalSidebarData.map((item, index) => (
+          {MedicalSidebarDataRestricted.map((item, index) => (
             <React.Fragment key={item.title}>
               <Link to={item.route} style={{ textDecoration: "none" }}>
                 <GridNavItems>

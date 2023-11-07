@@ -11,12 +11,11 @@ const Grid = styled.div`
 `;
 
 export function MissionHomeBox() {
-  axios.get("http://localhost:3331/", {withCredentials: true});
   return (
     <>
       <Grid>
         <DrugsBox data={null}></DrugsBox>
-        <MedicalEquipmentBox flightNum={"AOM-123"}></MedicalEquipmentBox>
+        {/* <MedicalEquipmentBox flightNum={"AOM-123"}></MedicalEquipmentBox> */}
       </Grid>
     </>
   );
@@ -31,24 +30,26 @@ const StyledMedicalEquipmentBox = styled.div`
   /* background-color: #b300ff; */
 `;
 
-export function MedicalEquipmentBox({ flightNum }) {
-  const [data, setData] = useState([{}]);
+// export function MedicalEquipmentBox({ flightNum }) {
+//   const [data, setData] = useState([{}]);
 
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:3331/Missions/${flightNum}`,{withCredentials: true})
-      .then((result) => {
-        setData(result.data);
-      })
-      .catch((e) => {});
-  }, []);
-  return (
-    <>
-      <StyledMedicalEquipmentBox></StyledMedicalEquipmentBox>
-    </>
-  );
-}
+//   useEffect(() => {
+//     if(!data);
+//     axios
+//       .get(`http://localhost:3331/Missions/:${flightNum}`,{withCredentials: true})
+//       .then((result) => {
+//         setData(result.data);
+//       })
+//       .catch((e) => {});
+//   }, []);
+
+//   return (
+//     <>
+//       <StyledMedicalEquipmentBox></StyledMedicalEquipmentBox>
+//     </>
+//   );
+// }
 
 const StyledDrugBoxGrid = styled.div`
   display: flex;

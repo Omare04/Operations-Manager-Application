@@ -31,7 +31,7 @@ const StyledHeader = styled.div`
   grid-column: 1/4;
   grid-row: 1;
   color: white;
-  background-image: linear-gradient(to right, #0080ff , #095df0);
+  background-image: linear-gradient(to right, #0080ff, #095df0);
   border: 1px solid #bebebe;
   height: 50px;
   border-radius: 5px;
@@ -59,9 +59,13 @@ export default function ExitEntryHistory() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    axios.get("http://localhost:3331/Med_stock/History", {withCredentials: true}).then((result) => {
-      setData(result.data);
-    });
+      axios
+        .get("http://localhost:3331/Med_stock/History", {
+          withCredentials: true,
+        })
+        .then((result) => {
+          setData(result.data);
+        });
   }, []);
 
   const columns = [
@@ -114,7 +118,9 @@ export default function ExitEntryHistory() {
     ];
 
     axios
-      .get(`http://localhost:3331/Med_stock/EntryExit/${type}`, {withCredentials: true})
+      .get(`http://localhost:3331/Med_stock/EntryExit/${type}`, {
+        withCredentials: true,
+      })
       .then((res) => {
         axios
           .get("http://localhost:3331/Services/generateTableRoute/EntryExit", {
@@ -136,7 +142,7 @@ export default function ExitEntryHistory() {
                   : "Medical Stock Removals",
             },
             responseType: "blob",
-            withCredentials: true
+            withCredentials: true,
           })
           .then((pdf) => {
             if (type == "Remove") {
@@ -183,7 +189,7 @@ export default function ExitEntryHistory() {
                   onClick={() => {
                     handleExport("Enter");
                   }}
-                  >
+                >
                   Export Stock Entries
                 </Button>
                 <Button

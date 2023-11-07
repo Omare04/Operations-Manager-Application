@@ -127,3 +127,62 @@ export const MedicalSidebarData = [
     isPrivate: false,
   },
 ];
+
+export const MedicalSidebarDataRestricted = [
+  {
+    title: "Medical Stock",
+    icon: <FaIcons.FaMedkit />,
+    arrow: <FaIcons.FaAngleDown />,
+    index: 0,
+    isPrivate: false,
+    Submenu: [
+      {
+        title: "View Drugs",
+        route: "/pages/Stock/Drug_stock",
+        icon: <FaIcons.FaEye />,
+        isPrivate: false,
+      },
+      {
+        title: "View Medical Equipment ",
+        route: "/pages/Stock/MedicalEquipmentStock",
+        icon: <FaIcons.FaTools />,
+        isPrivate: false,
+      },
+    ],
+  },
+  {
+    title: "Medical Orders",
+    icon: <FaIcons.FaClipboardList />,
+    arrow: <FaIcons.FaAngleDown />,
+    isPrivate: false,
+    Submenu: [
+      {
+        title: "Create An Order",
+        route: "/pages/Orders/Med_Order",
+        icon: <FaIcons.FaCartPlus />,
+        index: 1,
+        isPrivate: false,
+      },
+      {
+        title: "View Active Orders",
+        route: "/pages/Orders/ViewMedOrders",
+        icon: <FaIcons.FaEye />,
+        index: 1,
+        isPrivate: false,
+      },
+      {
+        title: "View Past Orders",
+        route: "/pages/Orders/ViewPastMedOrders",
+        icon: <FaIcons.FaEye />,
+        index: 1,
+        isPrivate: false,
+      },
+    ],
+  },
+  {
+    title: "Missions",
+    icon: <FaIcons.FaPlaneDeparture />,
+    route: "/pages/Missions/Missions",
+    isPrivate: false,
+  },
+];

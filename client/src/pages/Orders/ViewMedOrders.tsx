@@ -157,6 +157,7 @@ export default function ViewMedOrders() {
   const [pdfTableData, setpdfTableData] = useState([{}]);
 
   const orderTable = OrderTable({
+    style: "'display:'flex', alignItems:'center''",
     route: "Orders/MedView",
     table_height: "500px",
     subMenuRoute: "MedView",

@@ -25,10 +25,12 @@ import {
   EditOrderModal,
 } from "../../pages/Modals/AddStockModal";
 
-const Styledtbody = styled.tbody``;
+const Styledtbody = styled.tbody`
+`;
 
 const StyledTableContainer = styled.div`
   overflow-y: auto;
+  background-color: #e7e7e776;
   border-collapse: collapse;
   grid-column: 1/6;
   grid-row: 2/3;
@@ -36,10 +38,8 @@ const StyledTableContainer = styled.div`
 
 const StyledTable = styled.table`
   overflow: auto;
-  background-color: #dddddd;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
-  height: 400px;
   grid-column: 1/6;
   border-collapse: collapse;
   width: 100%;
@@ -48,13 +48,13 @@ const StyledTable = styled.table`
 const StyledTableRows = styled.tr`
   align-items: center;
   justify-content: center;
-  justify-content: center;
-  align-items: center;
   width: 100%;
   transition: background-color 0.1s ease-in-out;
   cursor: pointer;
+  /* height: 70px; */
 
-  background-color: #ffffff;
+  background-color: ${(props) =>
+    props.alternating % 2 == 0 ? "rgb(255, 255, 255)" : "#ffffffaa"};
 `;
 
 const StyledTableHeading = styled.th`
@@ -100,7 +100,7 @@ const StyledFilterContainer = styled.div`
   grid-column: 1/6;
   grid-row: 1;
   margin-bottom: 10px;
-  height: 40px;
+  /* height: 40px; */
 `;
 
 const StyledSearchBox = styled.div`
@@ -253,14 +253,14 @@ export function Table({
 
   const arrowState = (arrow, index) => {
     return arrow == null ? (
-      <FaIcons.FaAngleDown
+      <FaIcons.FaEllipsisH
         onClick={() => openArrow(index)}
         style={{
           color: arrow === index ? "#8d8d8d" : "#000000",
         }}
       />
     ) : (
-      <FaIcons.FaAngleUp
+      <FaIcons.FaEllipsisH
         onClick={() => openArrow(index)}
         style={{
           color: arrow === index ? "#8d8d8d" : "#000000",
@@ -303,75 +303,73 @@ export function Table({
       </StyledFilterContainer>
       <StyledTableContainer style={{ height: table_size }}>
         <StyledTable>
-          <Styledtbody>
-            <StyledTableRows>
-              {headers.map((data) => (
-                <StyledTableHeading key={data}>{data}</StyledTableHeading>
-              ))}
-              <StyledTableHeading></StyledTableHeading>
-            </StyledTableRows>
-            {fetchedRows
-              .filter((data) => {
-                if (dropdowncomp.selectedValue == null) {
-                  return data[filterInitialVal]
-                    .toLowerCase()
-                    .includes(search.toLowerCase());
-                } else {
-                  return search.toLowerCase() === ""
-                    ? data
-                    : data[dropdowncomp.selectedValue]
-                        .toLowerCase()
-                        .includes(search.toLowerCase());
-                }
-              })
-              .map((data, index) => (
-                <React.Fragment key={data.id}>
-                  <StyledTableRows>
-                    {td.map((tabledata) => (
-                      <StyledTableData key={tabledata}>
-                        {data[tabledata]}
+          <StyledTableRows style={{ height: "50px" }}>
+            {headers.map((data) => (
+              <StyledTableHeading key={data}>{data}</StyledTableHeading>
+            ))}
+            <StyledTableHeading></StyledTableHeading>
+          </StyledTableRows>
+          {fetchedRows
+            .filter((data) => {
+              if (dropdowncomp.selectedValue == null) {
+                return data[filterInitialVal]
+                  .toLowerCase()
+                  .includes(search.toLowerCase());
+              } else {
+                return search.toLowerCase() === ""
+                  ? data
+                  : data[dropdowncomp.selectedValue]
+                      .toLowerCase()
+                      .includes(search.toLowerCase());
+              }
+            })
+            .map((data, index) => (
+              <React.Fragment key={data.id}>
+                <StyledTableRows key={index} alternating={index}>
+                  {td.map((tabledata) => (
+                    <StyledTableData key={tabledata}>
+                      {data[tabledata]}
+                    </StyledTableData>
+                  ))}
+
+                  {dropdown ? (
+                    <>
+                      <StyledTableData>
+                        <StyledArrowDown>
+                          {arrowState(arrow, index)}
+                        </StyledArrowDown>
                       </StyledTableData>
-                    ))}
+                    </>
+                  ) : (
+                    <>
+                      <StyledTableData>
+                        <FaIcons.FaAngleUp
+                          onClick={() => openArrow(index)}
+                          style={{
+                            color: arrow === index ? "#8d8d8d" : "#000000",
+                          }}
+                        />
+                      </StyledTableData>
+                    </>
+                  )}
+                </StyledTableRows>
 
-                    {dropdown ? (
-                      <>
-                        <StyledTableData>
-                          <StyledArrowDown>
-                            {arrowState(arrow, index)}
-                          </StyledArrowDown>
-                        </StyledTableData>
-                      </>
-                    ) : (
-                      <>
-                        <StyledTableData>
-                          <FaIcons.FaAngleUp
-                            onClick={() => openArrow(index)}
-                            style={{
-                              color: arrow === index ? "#8d8d8d" : "#000000",
-                            }}
-                          />
-                        </StyledTableData>
-                      </>
-                    )}
-                  </StyledTableRows>
-
-                  {dropdown && arrow === index ? (
-                    <Medlistdata
-                      dropdown={arrow === index}
-                      Product_ID={data.product_id}
-                      Product_name={data.product_name}
-                      Product_type={data.product_type}
-                      DateExpiry={data.Date_Of_Expiry}
-                      DateInspected={""}
-                      Location={data.location_flightnum}
-                      Quantity={data.Quantity}
-                      UserId={data.user_id}
-                      UserName="Reda Ouhda"
-                    />
-                  ) : null}
-                </React.Fragment>
-              ))}
-          </Styledtbody>
+                {dropdown && arrow === index ? (
+                  <Medlistdata
+                    dropdown={arrow === index}
+                    Product_ID={data.product_id}
+                    Product_name={data.product_name}
+                    Product_type={data.product_type}
+                    DateExpiry={data.Date_Of_Expiry}
+                    DateInspected={""}
+                    Location={data.location_flightnum}
+                    Quantity={data.Quantity}
+                    UserId={data.user_id}
+                    UserName="Reda Ouhda"
+                  />
+                ) : null}
+              </React.Fragment>
+            ))}
         </StyledTable>
       </StyledTableContainer>
       <StyledPaginationNav>
@@ -417,11 +415,16 @@ export function TableStatic({ arr, headers, td, dropdown, ordertable }) {
   useEffect(() => {
     const data = localStorage.getItem("Orders_info");
     if (data) {
+      console.log("we're here!");
       setArray(JSON.parse(data));
     } else {
       setArray(arr);
     }
   }, []);
+
+  useEffect(() => {
+    console.log(arr);
+  }, [array]);
 
   useEffect(() => {
     localStorage.setItem("Orders_info", JSON.stringify(array));
@@ -453,8 +456,8 @@ export function TableStatic({ arr, headers, td, dropdown, ordertable }) {
               ))}
             </StyledTableRows>
 
-            {array.map((data, index) => (
-              <StyledTableRows key={index}>
+            {arr.map((data, index) => (
+              <StyledTableRows key={index} alternating={null}>
                 {Object.values(data).map((value, i) => (
                   <StyledTableData key={i}>{value}</StyledTableData>
                 ))}
@@ -678,9 +681,10 @@ const StyledEditIcons = styled.div`
 
 const StyledNoOrderMessage = styled.div`
   display: flex;
+  text-align: center;
   justify-content: center;
-  align-items: center;
   height: 100%;
+  align-items: center;
   width: 100%;
   font-style: italic;
 
@@ -691,7 +695,13 @@ const StyledNoOrderMessage = styled.div`
 `;
 
 //Table that maps through the orders and allows editing and deleting of order items.
-export function OrderTable({ route, table_height, subMenuRoute, deleteRoute }) {
+export function OrderTable({
+  route,
+  table_height,
+  subMenuRoute,
+  deleteRoute,
+  style,
+}) {
   const [data, setData] = useState([]);
   // State variable to store the index of the open row
   const [openRow, setOpenRow] = useState(-1);
@@ -722,7 +732,7 @@ export function OrderTable({ route, table_height, subMenuRoute, deleteRoute }) {
     axios
       .delete(`http://localhost:3331/Orders/${deleteRoute}/${item.order_id}`, {
         params: { PO: item.PO, product: item.product_name },
-        withCredentials: true, 
+        withCredentials: true,
       })
       .then((result) => {
         alert(result.data.message);
@@ -829,7 +839,7 @@ export function OrderTable({ route, table_height, subMenuRoute, deleteRoute }) {
       .catch((e) => {
         // console.log(e);
       });
-  }, [route]); 
+  }, [route]);
 
   const handleDropdownClick = (index) => {
     //When the openRow eqauls the index then the submenu is opened else its closed.
@@ -866,11 +876,16 @@ export function OrderTable({ route, table_height, subMenuRoute, deleteRoute }) {
   return {
     Orderdetails,
     render: (
-      <StyledTableContainer style={{ height: table_height }}>
+      <StyledTableContainer
+        style={{ height: table_height, alignItems: "center" }}
+      >
         <StyledTable>
           <Styledtbody>
             {data.length == 0 ? (
-              <StyledNoOrderMessage>No Active Orders</StyledNoOrderMessage>
+              <StyledNoOrderMessage
+              >
+                No Active Orders
+              </StyledNoOrderMessage>
             ) : (
               data.map((item, index) => (
                 <React.Fragment key={index}>

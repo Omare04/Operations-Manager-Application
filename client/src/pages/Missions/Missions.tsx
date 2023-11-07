@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { MaterialReactTable } from "material-react-table";
@@ -14,7 +14,11 @@ import {
   AddToStock,
   CreateMissionButton,
 } from "../../components/content/Input_components";
-import { ViewMissionModal, ViewMissionModalSummary } from "../Modals/AddStockModal";
+import {
+  ViewMissionModal,
+  ViewMissionModalSummary,
+} from "../Modals/AddStockModal";
+import { CSSTransition, Transition } from "react-transition-group";
 
 const Grid = styled.div`
   display: grid;
@@ -76,7 +80,7 @@ function Missions() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3331/Planes",{withCredentials: true})
+      .get("http://localhost:3331/Planes", { withCredentials: true })
       .then((result) => {
         setData(result.data);
         setLoading(false);
@@ -132,6 +136,7 @@ const StyledBoxHeader = styled.div`
 
 function ActiveMissionsBox() {
   const [modal, setModal] = useState(false);
+
   return (
     <>
       <StyledActiveWrapper>
@@ -142,6 +147,7 @@ function ActiveMissionsBox() {
         </StyledBoxHeader>
         <ActiveMissionList></ActiveMissionList>
       </StyledActiveWrapper>
+
       <ViewMissionModal open={modal} onClose={() => setModal(!modal)} />
     </>
   );
@@ -210,8 +216,7 @@ const StyledPersoneleWrapper = styled.div`
 function PersoneleBox() {
   return (
     <>
-      <StyledPersoneleWrapper>
-      </StyledPersoneleWrapper>
+      <StyledPersoneleWrapper></StyledPersoneleWrapper>
     </>
   );
 }
@@ -242,9 +247,6 @@ const StyledPastMissionsBox = styled.div`
 `;
 
 function PastMissionBoxes() {
-  useEffect(() => {
-    axios.get("http://localhost:3331/missions", {withCredentials: true}).then((result) => {});
-  }, []);
   return (
     <>
       <StyledPastMissionsBox>

@@ -36,7 +36,7 @@ const pool = mysql.createPool({
 router.use(
   cors({
     origin: "http://localhost:5173",
-    method: ["GET", "POST", "PUT", "DELETE"],
+    method: ["GET", "POST"],
     credentials: true,
   })
 );
@@ -123,7 +123,6 @@ function setRefreshToken(token, user, tokenID) {
     pool.query(insertQuery, values, (err, insertResult) => {
       if (err) {
         reject(err);
-        console.log(err);
       } else {
         resolve(insertResult);
       }
@@ -159,8 +158,6 @@ router
       const email = req.body.email;
       const password = req.body.password;
       const position = req.body.position;
-
-      console.log(fname);
 
       const salt = await bcrypt.genSalt();
       const hashedPassword = await bcrypt.hash(password, salt);
@@ -459,10 +456,6 @@ router.route("/:id").get((req, res) => {
   });
 });
 
-router.route("/getCookie").get((req, res) => {
-  res.send(req.cookies);
-});
-
 export function userAuthMiddleWare(req, res, next) {
   // Check if tokenId is null or undefined, which means the user does not have one set in their cookie
   const tokenId = req.cookies.tokenId;
@@ -470,7 +463,6 @@ export function userAuthMiddleWare(req, res, next) {
   //Figure how to retrieve the cookies from the http cookies when activating the middleware.
 
   if (tokenId === null || tokenId === undefined) {
-    console.log(tokenId);
     return res
       .cookie("accessToken", "", {
         path: "/",
@@ -507,7 +499,6 @@ export function userAuthMiddleWare(req, res, next) {
               next();
             })
             .catch((e) => {
-              console.log("loggin in false");
               res
                 .cookie("accessToken", "", {
                   path: "/",

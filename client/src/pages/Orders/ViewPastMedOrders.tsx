@@ -45,7 +45,7 @@ const StyledHeader = styled.div`
 `;
 
 export default function ViewPastMedOrders() {
-  const [data, setData] = useState({});
+  const [data, setData] = useState([{}]);
   const [loading, setLoading] = useState(true);
   //An Array that holds one or more orders that are arrays of objects
   const [pdfTableData, setpdfTableData] = useState([[{}]]);
@@ -54,24 +54,18 @@ export default function ViewPastMedOrders() {
   const [clickMessage, setClickMessage] = useState("");
   const [clickState, setClickState] = useState(false);
 
-  const orderTable = OrderTable({
-    route: "Orders/PastMedOrders",
-    table_height: "500px",
-    subMenuRoute: "MedView",
-    editRoute: "EditMedOrder",
-    deleteRoute: "DeleteMedItem",
-  });
+ 
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3331/Orders/PastMedOrders", {
-        withCredentials: true,
-      })
-      .then((result) => {
-        setData(result.data);
-        setLoading(false);
-      })
-      .catch((e) => {});
+      axios
+        .get("http://localhost:3331/Orders/PastMedOrders", {
+          withCredentials: true,
+        })
+        .then((result) => {
+          setData(result.data);
+          setLoading(false);
+        })
+        .catch((e) => {});
   }, []);
 
   const columns = useMemo(

@@ -31,8 +31,8 @@ const Grid = styled.div`
 `;
 
 const StyledOrderdetailbox = styled.div`
-  display:flex; 
-  justify-content: space-between; 
+  display: flex;
+  justify-content: space-between;
   flex-direction: column;
   background: #ffffff;
   border: 2px solid #f4f4f4;
@@ -284,19 +284,26 @@ export function getCurrentDate() {
 }
 
 function Supplierdetails() {
-  const [numOfOrders, setNumOfOrders] = useState(0);
+  const [numOfOrders, setNumOfOrders] = useState(null);
   const [supplierId, setSupplierId] = useState(null);
 
   useEffect(() => {
     axios
-      .get("http://localhost:3331/orders/Parts/numOfOrders", {
-        withCredentials: true,
-      })
+      .post(
+        "http://localhost:3331/Orders/PO",
+        {
+          tableName: "MaintenanceOrders",
+        },
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
+        console.log(res)
         setNumOfOrders(res.data);
       })
       .catch((e) => {
-        // console.log(e);
+        // Handle errors
       });
   }, []);
 
@@ -305,7 +312,7 @@ function Supplierdetails() {
     row: 1,
     col: 1,
     disabled: true,
-    content: ordercode(numOfOrders),
+    content: numOfOrders,
   });
   const input2 = InputComp({
     title: "Date Of Order",
@@ -324,7 +331,7 @@ function Supplierdetails() {
     placeholderprop: "Select",
   });
 
-  const Ordercode = ordercode(numOfOrders);
+  const Ordercode = numOfOrders;
   const DoO = getCurrentDate();
   const SupplierName = dropdown.selectedValue;
 
@@ -634,7 +641,7 @@ function Orderlist({ arr }) {
       "Plane",
       "Price",
       "Date",
-      "Status"
+      "Status",
     ],
     dropdown: false,
     ordertable: null,

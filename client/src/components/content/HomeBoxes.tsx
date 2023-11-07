@@ -58,7 +58,7 @@ export function ActiveOrders() {
     axios
       .get("http://localhost:3331/Orders/Active", { withCredentials: true })
       .then((res) => {
-        setActiveOrders(res.data);
+        if (!activeOrders) setActiveOrders(res.data);
       })
       .catch((e) => {
         console.error(e);
@@ -111,7 +111,9 @@ export function ActiveOrders() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3331/Orders/ActiveCount", {withCredentials: true})
+      .get("http://localhost:3331/Orders/ActiveCount", {
+        withCredentials: true,
+      })
       .then((result) => {
         // console.log("here " + result);
         setActiveOrdersCount(result.data.payload);
@@ -153,7 +155,7 @@ export function ApproachingExpiry() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3331/Med_stock/Expired`, {withCredentials: true})
+      .get(`http://localhost:3331/Med_stock/Expired`, { withCredentials: true })
       .then((res) => {
         setData(res.data);
       })
@@ -189,7 +191,7 @@ export function OrderDataChart() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3331/Orders/OrderChart", {withCredentials: true})
+      .get("http://localhost:3331/Orders/OrderChart", { withCredentials: true })
       .then((result) => {
         setTableData(result.data);
       })

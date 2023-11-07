@@ -74,11 +74,6 @@ app.route("/retrieveRefreshToken").post((req, res) => {
   });
 });
 
-app.route("/getCookie").get((req, res) => {
-  console.log(req.cookies);
-  res.send(req.cookies);
-});
-
 const PORT = 3331;
 
 app.listen(PORT, () => {

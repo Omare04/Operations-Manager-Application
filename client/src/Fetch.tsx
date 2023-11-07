@@ -5,17 +5,17 @@ export function Fetch({ type, route }) {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:3331/${route}`, {
-      credentials: "include", 
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        setData(data);
+      fetch(`http://localhost:3331/${route}`, {
+        credentials: "include",
       })
-      .catch((err) => {
-        // Handle errors here
-        console.error(err);
-      });
+        .then((resp) => resp.json())
+        .then((data) => {
+          setData(data);
+        })
+        .catch((err) => {
+          // Handle errors here
+          console.error(err);
+        });
   }, [type]);
 
   return data;

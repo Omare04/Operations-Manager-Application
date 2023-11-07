@@ -52,7 +52,6 @@ const ModalWrapper = styled.div`
 
 const ModalContent = styled.div`
   width: 555px;
-  border-radius: 7px;
   transition: opacity 0.3s ease-in-out;
   background-image: linear-gradient(to right, #0080ff, #095df0);
 `;
@@ -405,12 +404,11 @@ export function AddMaintenanceStockModal({ open, onClose }) {
 
   //Dynamically retrieve each plane.
   useEffect(() => {
-    axios.get("http://localhost:3331/planes/getName").then(
-      (result) => {
+    axios
+      .get("http://localhost:3331/planes/getName", { withCredentials: true })
+      .then((result) => {
         setPlaneList(result.data);
-      },
-      { withCredentials: true }
-    );
+      });
   }, [values]);
 
   const productTypes = [
@@ -2291,8 +2289,6 @@ export function ViewMissionModal({ open, onClose, data }) {
       return checkEntryOfFields(counter);
     }
   };
-
-  function handleSubmit() {}
 
   if (!open) return null;
   return ReactDOM.createPortal(
