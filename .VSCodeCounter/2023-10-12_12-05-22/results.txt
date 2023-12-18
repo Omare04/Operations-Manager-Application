@@ -1,0 +1,153 @@
+Date : 2023-10-12 12:05:22
+Directory : /Users/omarelmasaoudi/Desktop/aom
+Total : 87 files,  25103 codes, 262 comments, 1390 blanks, all 26755 lines
+
+Languages
++-----------------------+------------+------------+------------+------------+------------+
+| language              | files      | code       | comment    | blank      | total      |
++-----------------------+------------+------------+------------+------------+------------+
+| TypeScript React      |         45 |     12,009 |        136 |        876 |     13,021 |
+| JSON                  |          6 |      9,080 |          0 |          5 |      9,085 |
+| JavaScript            |         23 |      2,749 |        119 |        472 |      3,340 |
+| compressionTargetFile |          4 |        979 |          0 |          5 |        984 |
+| Java                  |          2 |        134 |          1 |         18 |        153 |
+| SQL                   |          2 |         90 |          0 |          0 |         90 |
+| CSS                   |          1 |         20 |          2 |          6 |         28 |
+| JSON with Comments    |          1 |         20 |          2 |          3 |         25 |
+| HTML                  |          1 |         17 |          0 |          1 |         18 |
+| TypeScript            |          2 |          5 |          2 |          4 |         11 |
++-----------------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                   | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                      |         87 |     25,103 |        262 |      1,390 |     26,755 |
+| . (Files)                                                                              |          2 |         90 |          0 |          0 |         90 |
+| JavaDataFormatter                                                                      |          2 |        134 |          1 |         18 |        153 |
+| JavaDataFormatter/dataparser                                                           |          2 |        134 |          1 |         18 |        153 |
+| JavaDataFormatter/dataparser/bin                                                       |          1 |         56 |          0 |          0 |         56 |
+| JavaDataFormatter/dataparser/src                                                       |          1 |         78 |          1 |         18 |         97 |
+| client                                                                                 |         54 |     18,534 |        142 |        829 |     19,505 |
+| client (Files)                                                                         |          7 |      6,618 |          3 |         11 |      6,632 |
+| client/public                                                                          |          2 |        563 |          0 |          3 |        566 |
+| client/src                                                                             |         45 |     11,353 |        139 |        815 |     12,307 |
+| client/src (Files)                                                                     |          6 |         86 |          4 |         17 |        107 |
+| client/src/Helper                                                                      |          4 |        412 |         16 |         34 |        462 |
+| client/src/Hooks                                                                       |          2 |         77 |          8 |         12 |         97 |
+| client/src/assets                                                                      |          1 |          1 |          0 |          0 |          1 |
+| client/src/components                                                                  |          9 |      2,693 |         39 |        212 |      2,944 |
+| client/src/components (Files)                                                          |          1 |         61 |          0 |          6 |         67 |
+| client/src/components/content                                                          |          4 |      2,072 |         35 |        164 |      2,271 |
+| client/src/components/layout                                                           |          4 |        560 |          4 |         42 |        606 |
+| client/src/pages                                                                       |         23 |      8,084 |         72 |        540 |      8,696 |
+| client/src/pages (Files)                                                               |          4 |        786 |          2 |         52 |        840 |
+| client/src/pages/Missions                                                              |          4 |        701 |          3 |         68 |        772 |
+| client/src/pages/Modals                                                                |          2 |      3,656 |         23 |        192 |      3,871 |
+| client/src/pages/Orders                                                                |          6 |      1,919 |         12 |        147 |      2,078 |
+| client/src/pages/Registration                                                          |          2 |        170 |          0 |         27 |        197 |
+| client/src/pages/Stock                                                                 |          5 |        852 |         32 |         54 |        938 |
+| previous Iterations                                                                    |          4 |        680 |          0 |         68 |        748 |
+| previous Iterations/AddStock                                                           |          4 |        680 |          0 |         68 |        748 |
+| server                                                                                 |         25 |      5,665 |        119 |        475 |      6,259 |
+| server (Files)                                                                         |          3 |      2,582 |          0 |         11 |      2,593 |
+| server/Images                                                                          |          1 |        415 |          0 |          2 |        417 |
+| server/Services                                                                        |          4 |        704 |         23 |        145 |        872 |
+| server/config                                                                          |          1 |          1 |          0 |          0 |          1 |
+| server/cryptography                                                                    |          6 |         96 |         18 |         38 |        152 |
+| server/routes                                                                          |         10 |      1,867 |         78 |        279 |      2,224 |
++----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------+-----------------------+------------+------------+------------+------------+
+| filename                                                                               | language              | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------+-----------------------+------------+------------+------------+------------+
+| /Users/omarelmasaoudi/Desktop/aom/JavaDataFormatter/dataparser/bin/App.class           | Java                  |         56 |          0 |          0 |         56 |
+| /Users/omarelmasaoudi/Desktop/aom/JavaDataFormatter/dataparser/src/App.java            | Java                  |         78 |          1 |         18 |         97 |
+| /Users/omarelmasaoudi/Desktop/aom/client/.eslintrc.cjs                                 | JavaScript            |         14 |          0 |          1 |         15 |
+| /Users/omarelmasaoudi/Desktop/aom/client/index.html                                    | HTML                  |         17 |          0 |          1 |         18 |
+| /Users/omarelmasaoudi/Desktop/aom/client/package-lock.json                             | JSON                  |      6,501 |          0 |          1 |      6,502 |
+| /Users/omarelmasaoudi/Desktop/aom/client/package.json                                  | JSON                  |         51 |          0 |          1 |         52 |
+| /Users/omarelmasaoudi/Desktop/aom/client/public/AOM_logo_horizontal.png                | compressionTargetFile |        148 |          0 |          1 |        149 |
+| /Users/omarelmasaoudi/Desktop/aom/client/public/aomlogo.png                            | compressionTargetFile |        415 |          0 |          2 |        417 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/App.tsx                                   | TypeScript React      |         36 |          0 |          4 |         40 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/Fetch.tsx                                 | TypeScript React      |         15 |          1 |          4 |         20 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/GlobalStyles.js                           | JavaScript            |          3 |          0 |          0 |          3 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/Helper/PrivateRoutes.tsx                  | TypeScript React      |         13 |          3 |          4 |         20 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/Helper/authWrapper.tsx                    | TypeScript React      |        389 |          5 |         23 |        417 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/Helper/downLoadFunction.tsx               | TypeScript React      |          8 |          8 |          5 |         21 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/Helper/userContext.tsx                    | TypeScript React      |          2 |          0 |          2 |          4 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/Hooks/Reducers.tsx                        | TypeScript React      |          0 |          0 |          2 |          2 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/Hooks/useAuth.tsx                         | TypeScript React      |         77 |          8 |         10 |         95 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/Style.css                                 | CSS                   |         20 |          2 |          6 |         28 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/assets/react.svg                          | compressionTargetFile |          1 |          0 |          0 |          1 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/components/Charts.tsx                     | TypeScript React      |         61 |          0 |          6 |         67 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/components/content/HomeBoxes.tsx          | TypeScript React      |        215 |          3 |         19 |        237 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/components/content/Input_components.tsx   | TypeScript React      |        727 |          1 |         59 |        787 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/components/content/listdata.tsx           | TypeScript React      |        318 |          8 |         21 |        347 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/components/content/lists.tsx              | TypeScript React      |        812 |         23 |         65 |        900 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/components/layout/Header.tsx              | TypeScript React      |        125 |          2 |         13 |        140 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/components/layout/Layout.tsx              | TypeScript React      |        285 |          1 |         22 |        308 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/components/layout/Navbar.tsx              | TypeScript React      |         24 |          0 |          4 |         28 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/components/layout/SidebarData.tsx         | TypeScript React      |        126 |          1 |          3 |        130 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/main.tsx                                  | TypeScript React      |         12 |          0 |          2 |         14 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Dashboard_Components.tsx            | TypeScript React      |        203 |          0 |         14 |        217 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Home.tsx                            | TypeScript React      |        187 |          1 |         15 |        203 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Missions/MissionCharts.tsx          | TypeScript React      |         31 |          0 |          4 |         35 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Missions/MissionHomeBox.tsx         | TypeScript React      |         57 |          0 |         10 |         67 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Missions/Missions.tsx               | TypeScript React      |        233 |          2 |         24 |        259 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Missions/MissionsLists.tsx          | TypeScript React      |        380 |          1 |         30 |        411 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Modals/AddStockModal.tsx            | TypeScript React      |      3,307 |         19 |        167 |      3,493 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Modals/MedStockModal.tsx            | TypeScript React      |        349 |          4 |         25 |        378 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Orders/Add.tsx                      | TypeScript React      |        577 |          3 |         48 |        628 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Orders/Med_Order.tsx                | TypeScript React      |        346 |          3 |         32 |        381 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Orders/ViewMedOrders.tsx            | TypeScript React      |        353 |          0 |         24 |        377 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Orders/ViewPartOrders.tsx           | TypeScript React      |        152 |          2 |         13 |        167 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Orders/ViewPastMedOrders.tsx        | TypeScript React      |        249 |          2 |         15 |        266 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Orders/ViewPastPartOrders.tsx       | TypeScript React      |        242 |          2 |         15 |        259 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Plane_list.tsx                      | TypeScript React      |        158 |          1 |         10 |        169 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Registration/sign_in.tsx            | TypeScript React      |        163 |          0 |         25 |        188 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Registration/sign_up.tsx            | TypeScript React      |          7 |          0 |          2 |          9 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Stock/Drug_stock.tsx                | TypeScript React      |         58 |          0 |          6 |         64 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Stock/ExitEntryHistory.tsx          | TypeScript React      |        195 |          0 |         11 |        206 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Stock/ExitEntryHistoryEquipment.tsx | TypeScript React      |        167 |         31 |         11 |        209 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Stock/MaintenanceStock.tsx          | TypeScript React      |        189 |          1 |         11 |        201 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Stock/MedicalEquipmentStock.tsx     | TypeScript React      |        243 |          0 |         15 |        258 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Suppliers.tsx                       | TypeScript React      |        238 |          0 |         13 |        251 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/vite-env.d.ts                             | TypeScript            |          0 |          1 |          1 |          2 |
+| /Users/omarelmasaoudi/Desktop/aom/client/tsconfig.json                                 | JSON with Comments    |         20 |          2 |          3 |         25 |
+| /Users/omarelmasaoudi/Desktop/aom/client/tsconfig.node.json                            | JSON                  |         10 |          0 |          1 |         11 |
+| /Users/omarelmasaoudi/Desktop/aom/client/vite.config.ts                                | TypeScript            |          5 |          1 |          3 |          9 |
+| /Users/omarelmasaoudi/Desktop/aom/database_design.sql                                  | SQL                   |         89 |          0 |          0 |         89 |
+| /Users/omarelmasaoudi/Desktop/aom/db_querytst.sql                                      | SQL                   |          1 |          0 |          0 |          1 |
+| /Users/omarelmasaoudi/Desktop/aom/previous Iterations/AddStock/AddMedStock.tsx         | TypeScript React      |        158 |          0 |         13 |        171 |
+| /Users/omarelmasaoudi/Desktop/aom/previous Iterations/AddStock/AddPartStock.tsx        | TypeScript React      |        199 |          0 |         20 |        219 |
+| /Users/omarelmasaoudi/Desktop/aom/previous Iterations/AddStock/AddPlane.tsx            | TypeScript React      |        153 |          0 |         17 |        170 |
+| /Users/omarelmasaoudi/Desktop/aom/previous Iterations/AddStock/AddSupplier.tsx         | TypeScript React      |        170 |          0 |         18 |        188 |
+| /Users/omarelmasaoudi/Desktop/aom/server/Images/aomlogo.png                            | compressionTargetFile |        415 |          0 |          2 |        417 |
+| /Users/omarelmasaoudi/Desktop/aom/server/Services/ExportPartPOService.js               | JavaScript            |        207 |          6 |         39 |        252 |
+| /Users/omarelmasaoudi/Desktop/aom/server/Services/ExportTableService.js                | JavaScript            |        168 |          5 |         36 |        209 |
+| /Users/omarelmasaoudi/Desktop/aom/server/Services/Notifications.js                     | JavaScript            |          7 |          1 |          8 |         16 |
+| /Users/omarelmasaoudi/Desktop/aom/server/Services/PurchaseOrderService.js              | JavaScript            |        322 |         11 |         62 |        395 |
+| /Users/omarelmasaoudi/Desktop/aom/server/config/passport.js                            | JavaScript            |          1 |          0 |          0 |          1 |
+| /Users/omarelmasaoudi/Desktop/aom/server/cryptography/createKeypair.js                 | JavaScript            |         25 |          3 |          7 |         35 |
+| /Users/omarelmasaoudi/Desktop/aom/server/cryptography/decrypt.js                       | JavaScript            |          7 |          0 |          4 |         11 |
+| /Users/omarelmasaoudi/Desktop/aom/server/cryptography/encrypt.js                       | JavaScript            |          9 |          6 |          5 |         20 |
+| /Users/omarelmasaoudi/Desktop/aom/server/cryptography/mainCrypto.js                    | JavaScript            |         16 |          5 |          5 |         26 |
+| /Users/omarelmasaoudi/Desktop/aom/server/cryptography/signMessage.js                   | JavaScript            |         26 |          4 |         11 |         41 |
+| /Users/omarelmasaoudi/Desktop/aom/server/cryptography/verifyIdentity.js                | JavaScript            |         13 |          0 |          6 |         19 |
+| /Users/omarelmasaoudi/Desktop/aom/server/package-lock.json                             | JSON                  |      2,473 |          0 |          1 |      2,474 |
+| /Users/omarelmasaoudi/Desktop/aom/server/package.json                                  | JSON                  |         31 |          0 |          1 |         32 |
+| /Users/omarelmasaoudi/Desktop/aom/server/routes/Maintanance_stock.js                   | JavaScript            |        118 |          0 |         20 |        138 |
+| /Users/omarelmasaoudi/Desktop/aom/server/routes/Med_stock.js                           | JavaScript            |        334 |          4 |         50 |        388 |
+| /Users/omarelmasaoudi/Desktop/aom/server/routes/MedicalEquipmentStock.js               | JavaScript            |        167 |          6 |         24 |        197 |
+| /Users/omarelmasaoudi/Desktop/aom/server/routes/Missions.js                            | JavaScript            |        123 |         10 |         25 |        158 |
+| /Users/omarelmasaoudi/Desktop/aom/server/routes/Orders.js                              | JavaScript            |        510 |         12 |         78 |        600 |
+| /Users/omarelmasaoudi/Desktop/aom/server/routes/Stock.js                               | JavaScript            |         16 |          0 |          6 |         22 |
+| /Users/omarelmasaoudi/Desktop/aom/server/routes/Suppliers.js                           | JavaScript            |        109 |          0 |         14 |        123 |
+| /Users/omarelmasaoudi/Desktop/aom/server/routes/planes.js                              | JavaScript            |         79 |          0 |         13 |         92 |
+| /Users/omarelmasaoudi/Desktop/aom/server/routes/users.js                               | JavaScript            |        397 |         46 |         49 |        492 |
+| /Users/omarelmasaoudi/Desktop/aom/server/routes/users.json                             | JSON                  |         14 |          0 |          0 |         14 |
+| /Users/omarelmasaoudi/Desktop/aom/server/server.js                                     | JavaScript            |         78 |          0 |          9 |         87 |
+| Total                                                                                  |                       |     25,103 |        262 |      1,390 |     26,755 |
++----------------------------------------------------------------------------------------+-----------------------+------------+------------+------------+------------+

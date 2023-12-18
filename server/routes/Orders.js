@@ -70,8 +70,8 @@ PartOrder.use(
 );
 
 // PartOrder.use(userAuthMiddleWare);
-DrugOrder.use(userAuthMiddleWare);
-MedOrder.use(userAuthMiddleWare);
+// DrugOrder.use(userAuthMiddleWare);
+// MedOrder.use(userAuthMiddleWare);
 
 //ASYNC ISSUE WITH RETURN VALUE !!!!
 function generatePO(tableName) {
@@ -104,9 +104,7 @@ function generatePO(tableName) {
 }
 
 PartOrder.route("/PO").post((req, res) => {
-  generatePO("MaintenanceOrders").then((result) => {
-    console.log(result.data);
-  });
+  generatePO("MaintenanceOrders")
   console.log(generatePO("MaintenanceOrders"));
   res.send(generatePO("MaintenanceOrders"));
 });

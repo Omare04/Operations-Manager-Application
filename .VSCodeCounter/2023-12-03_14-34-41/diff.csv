@@ -1,0 +1,24 @@
+"filename", "language", "TypeScript React", "CSS", "HTML", "JavaScript", "JSON", "comment", "blank", "total"
+"/Users/omarelmasaoudi/Desktop/aom/client/index.html", "HTML", 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/omarelmasaoudi/Desktop/aom/client/src/Style.css", "CSS", 0, 0, 0, 0, 0, 0, 2, 2
+"/Users/omarelmasaoudi/Desktop/aom/client/src/components/content/HomeBoxes.tsx", "TypeScript React", 2, 0, 0, 0, 0, 0, 0, 2
+"/Users/omarelmasaoudi/Desktop/aom/client/src/components/content/Input_components.tsx", "TypeScript React", 2, 0, 0, 0, 0, 0, 0, 2
+"/Users/omarelmasaoudi/Desktop/aom/client/src/components/content/lists.tsx", "TypeScript React", 14, 0, 0, 0, 0, 0, 1, 15
+"/Users/omarelmasaoudi/Desktop/aom/client/src/components/layout/Layout.tsx", "TypeScript React", 50, 0, 0, 0, 0, -1, 1, 50
+"/Users/omarelmasaoudi/Desktop/aom/client/src/components/layout/SidebarData.tsx", "TypeScript React", 58, 0, 0, 0, 0, 0, 1, 59
+"/Users/omarelmasaoudi/Desktop/aom/client/src/main.tsx", "TypeScript React", -2, 0, 0, 0, 0, 0, 0, -2
+"/Users/omarelmasaoudi/Desktop/aom/client/src/pages/Home.tsx", "TypeScript React", 8, 0, 0, 0, 0, 0, 0, 8
+"/Users/omarelmasaoudi/Desktop/aom/client/src/pages/Missions/MissionHomeBox.tsx", "TypeScript React", -18, 0, 0, 0, 0, 18, 1, 1
+"/Users/omarelmasaoudi/Desktop/aom/client/src/pages/Missions/Missions.tsx", "TypeScript React", 0, 0, 0, 0, 0, 0, 2, 2
+"/Users/omarelmasaoudi/Desktop/aom/client/src/pages/Modals/AddStockModal.tsx", "TypeScript React", -3, 0, 0, 0, 0, 0, -1, -4
+"/Users/omarelmasaoudi/Desktop/aom/client/src/pages/Orders/Add.tsx", "TypeScript React", 7, 0, 0, 0, 0, 0, 0, 7
+"/Users/omarelmasaoudi/Desktop/aom/client/src/pages/Orders/Med_Order.tsx", "TypeScript React", -5, 0, 0, 0, 0, 0, -1, -6
+"/Users/omarelmasaoudi/Desktop/aom/client/src/pages/Orders/ViewMedOrders.tsx", "TypeScript React", 1, 0, 0, 0, 0, 0, 0, 1
+"/Users/omarelmasaoudi/Desktop/aom/client/src/pages/Orders/ViewPastMedOrders.tsx", "TypeScript React", -7, 0, 0, 0, 0, 0, 1, -6
+"/Users/omarelmasaoudi/Desktop/aom/client/src/pages/Stock/ExitEntryHistory.tsx", "TypeScript React", 6, 0, 0, 0, 0, 0, 0, 6
+"/Users/omarelmasaoudi/Desktop/aom/server/Services/Notifications.js", "JavaScript", 0, 0, 0, 0, 0, 1, 4, 5
+"/Users/omarelmasaoudi/Desktop/aom/server/routes/Orders.js", "JavaScript", 0, 0, 0, 24, 0, 4, 8, 36
+"/Users/omarelmasaoudi/Desktop/aom/server/routes/users.js", "JavaScript", 0, 0, 0, -5, 0, 0, 0, -5
+"/Users/omarelmasaoudi/Desktop/aom/server/routes/users.json", "JSON", 0, 0, 0, 0, -14, 0, 0, -14
+"/Users/omarelmasaoudi/Desktop/aom/server/server.js", "JavaScript", 0, 0, 0, -4, 0, 0, -1, -5
+"Total", "-", 113, 0, 0, 15, -14, 22, 19, 155

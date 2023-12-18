@@ -1,0 +1,70 @@
+Date : 2023-10-12 12:05:22
+Directory : /Users/omarelmasaoudi/Desktop/aom
+Total : 25 files,  556 codes, 5 comments, 13 blanks, all 574 lines
+
+Languages
++------------------+------------+------------+------------+------------+------------+
+| language         | files      | code       | comment    | blank      | total      |
++------------------+------------+------------+------------+------------+------------+
+| JavaScript       |         10 |        264 |         10 |         18 |        292 |
+| TypeScript React |         13 |        187 |         -5 |         -5 |        177 |
+| JSON             |          2 |        105 |          0 |          0 |        105 |
++------------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                   | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                      |         25 |        556 |          5 |         13 |        574 |
+| client                                                                                 |         14 |        284 |         -5 |         -5 |        274 |
+| client (Files)                                                                         |          2 |        105 |          0 |          0 |        105 |
+| client/src                                                                             |         12 |        179 |         -5 |         -5 |        169 |
+| client/src (Files)                                                                     |          2 |        -11 |          0 |         -3 |        -14 |
+| client/src/Helper                                                                      |          1 |        118 |         -4 |          5 |        119 |
+| client/src/components                                                                  |          2 |         -1 |         -1 |         -1 |         -3 |
+| client/src/components/content                                                          |          1 |          4 |          0 |          0 |          4 |
+| client/src/components/layout                                                           |          1 |         -5 |         -1 |         -1 |         -7 |
+| client/src/pages                                                                       |          7 |         73 |          0 |         -6 |         67 |
+| client/src/pages (Files)                                                               |          1 |         -2 |          0 |          0 |         -2 |
+| client/src/pages/Modals                                                                |          1 |         61 |          0 |         -1 |         60 |
+| client/src/pages/Orders                                                                |          3 |         12 |          0 |         -5 |          7 |
+| client/src/pages/Stock                                                                 |          2 |          2 |          0 |          0 |          2 |
+| previous Iterations                                                                    |          1 |          8 |          0 |          0 |          8 |
+| previous Iterations/AddStock                                                           |          1 |          8 |          0 |          0 |          8 |
+| server                                                                                 |         10 |        264 |         10 |         18 |        292 |
+| server (Files)                                                                         |          1 |         -7 |          0 |         -2 |         -9 |
+| server/Services                                                                        |          1 |         -3 |          0 |         -2 |         -5 |
+| server/routes                                                                          |          8 |        274 |         10 |         22 |        306 |
++----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| filename                                                                               | language         | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| /Users/omarelmasaoudi/Desktop/aom/client/package-lock.json                             | JSON             |        103 |          0 |          0 |        103 |
+| /Users/omarelmasaoudi/Desktop/aom/client/package.json                                  | JSON             |          2 |          0 |          0 |          2 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/App.tsx                                   | TypeScript React |        -11 |          0 |         -2 |        -13 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/Fetch.tsx                                 | TypeScript React |          0 |          0 |         -1 |         -1 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/Helper/authWrapper.tsx                    | TypeScript React |        118 |         -4 |          5 |        119 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/components/content/HomeBoxes.tsx          | TypeScript React |          4 |          0 |          0 |          4 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/components/layout/Header.tsx              | TypeScript React |         -5 |         -1 |         -1 |         -7 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Home.tsx                            | TypeScript React |         -2 |          0 |          0 |         -2 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Modals/AddStockModal.tsx            | TypeScript React |         61 |          0 |         -1 |         60 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Orders/ViewPartOrders.tsx           | TypeScript React |          5 |          0 |         -5 |          0 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Orders/ViewPastMedOrders.tsx        | TypeScript React |          6 |          0 |          0 |          6 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Orders/ViewPastPartOrders.tsx       | TypeScript React |          1 |          0 |          0 |          1 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Stock/ExitEntryHistory.tsx          | TypeScript React |          1 |          0 |          0 |          1 |
+| /Users/omarelmasaoudi/Desktop/aom/client/src/pages/Stock/ExitEntryHistoryEquipment.tsx | TypeScript React |          1 |          0 |          0 |          1 |
+| /Users/omarelmasaoudi/Desktop/aom/previous Iterations/AddStock/AddMedStock.tsx         | TypeScript React |          8 |          0 |          0 |          8 |
+| /Users/omarelmasaoudi/Desktop/aom/server/Services/PurchaseOrderService.js              | JavaScript       |         -3 |          0 |         -2 |         -5 |
+| /Users/omarelmasaoudi/Desktop/aom/server/routes/Maintanance_stock.js                   | JavaScript       |         17 |          0 |          2 |         19 |
+| /Users/omarelmasaoudi/Desktop/aom/server/routes/Med_stock.js                           | JavaScript       |         16 |          0 |          0 |         16 |
+| /Users/omarelmasaoudi/Desktop/aom/server/routes/MedicalEquipmentStock.js               | JavaScript       |         17 |          0 |          4 |         21 |
+| /Users/omarelmasaoudi/Desktop/aom/server/routes/Missions.js                            | JavaScript       |         17 |          0 |          0 |         17 |
+| /Users/omarelmasaoudi/Desktop/aom/server/routes/Orders.js                              | JavaScript       |         41 |          0 |          3 |         44 |
+| /Users/omarelmasaoudi/Desktop/aom/server/routes/Suppliers.js                           | JavaScript       |         17 |          0 |          0 |         17 |
+| /Users/omarelmasaoudi/Desktop/aom/server/routes/planes.js                              | JavaScript       |         17 |          0 |          1 |         18 |
+| /Users/omarelmasaoudi/Desktop/aom/server/routes/users.js                               | JavaScript       |        132 |         10 |         12 |        154 |
+| /Users/omarelmasaoudi/Desktop/aom/server/server.js                                     | JavaScript       |         -7 |          0 |         -2 |         -9 |
+| Total                                                                                  |                  |        556 |          5 |         13 |        574 |
++----------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
