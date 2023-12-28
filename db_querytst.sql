@@ -1,1 +1,1 @@
-SELECT * FROM MaintenanceOrders WHERE YEAR()
+DELETE FROM DrugOrders 	

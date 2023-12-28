@@ -51,7 +51,7 @@ const ModalWrapper = styled.div`
 `;
 
 const ModalContent = styled.div`
-  width: 555px;
+  width: ${(props) => (props.counterProp == 4 ? "1055px" : "555px")};
   transition: opacity 0.3s ease-in-out;
   background-image: linear-gradient(to right, #0080ff, #095df0);
 `;
@@ -2349,7 +2349,7 @@ export function ViewMissionModal({ open, onClose, data }) {
               5
             </StyledProgressItems>
           </StyledProgressBarWrapper>
-          <ModalContent>
+          <ModalContent counterProp={progressCounter}>
             {renderMissionsHeader({
               title: `New MedicVac Mission`,
               closeFunc: onClose,
@@ -2360,7 +2360,7 @@ export function ViewMissionModal({ open, onClose, data }) {
                 style={{
                   gridTemplateRows: "1fr 1fr 1fr",
                   height: "500px",
-                  width: "400px",
+                  width: progressCounter == 4 ? "900px" : "450px",
                 }}
               >
                 {renderPages(progressCounter)}
@@ -3185,9 +3185,6 @@ function MissionSummaryPage(page) {
           <MissionSummaryToggleList
             data={missionState}
           ></MissionSummaryToggleList>
-          <StyledGreyLine
-            style={{ width: "100%", marginBottom: "5px", marginTop: "20px" }}
-          />
           <StyledSubSectionHeader style={{ paddingTop: "15px" }}>
             {" "}
             Additional Notes

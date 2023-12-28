@@ -284,7 +284,7 @@ const StyledListTable = styled.table`
   background-image: linear-gradient(to right, #f7f7f7, #e6e6e6);
   border: 1px solid rgb(194, 194, 194);
   max-height: 100px;
-  height: 100px;
+  height: 300px;
   width: 100%;
 `;
 

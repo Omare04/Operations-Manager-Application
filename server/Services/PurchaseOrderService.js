@@ -6,19 +6,6 @@ import axios from "axios";
 
 const pdfRoute = express.Router();
 
-function getUser(id) {
-  return new Promise((resolve, reject) => {
-    axios
-      .get(`http://localhost:3331/users/${id.uid}`, { withCredentials: true })
-      .then((response) => {
-        return resolve(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  });
-}
-
 pdfRoute.route("/").get((req, res) => {
   const { type, item, info, user, Supplier } = req.query;
 
@@ -88,14 +75,12 @@ export function generateHeader(doc, user, type) {
   if (type == "Medicine") {
     doc
       .image(
-        "/Users/omarelmasaoudi/Desktop/aom/server/Images/aomlogo.png",
+        "/Users/omarelmasaoudi/Desktop/aom/server/Images/airambulance.png",
         50,
         45,
-        { width: 50 }
       )
       .fillColor("#444444")
       .fontSize(18)
-      .text("AOM Air Ambulance", 112, 62)
       .fontSize(10)
       .text("Air Ocean Maroc", 200, 50, { align: "right" })
       .text("1, Rue Maamar Al Battani", 200, 65, { align: "right" })
@@ -106,7 +91,7 @@ export function generateHeader(doc, user, type) {
   } else {
     doc
       .image(
-        "/Users/omarelmasaoudi/Desktop/aom/server/Images/aomlogo.png",
+        "/Users/omarelmasaoudi/Desktop/aom/server/Images/airAmbulance.png",
         50,
         45,
         { width: 50 }
@@ -198,27 +183,31 @@ export function generateCustomerInformation(type, doc, info, po, Supplier) {
       generateHr(doc, 252);
     }
   } else {
-    doc.fillColor("#444444").fontSize(20).text("Order", 50, 160);
+    doc.fillColor("#444444").fontSize(20).text("Medicinal consumables", 50, 160);
     generateHr(doc, 185);
+
+    let totalQty = 0;
+
+    for (let i = 0; i < po.length; i++) {
+      totalQty += po[i].Qty
+    }
 
     const customerInformationTop = 200;
     doc
       .fontSize(10)
-      .text("PO Number:", 50, customerInformationTop)
+      .text("File Number:", 50, customerInformationTop)
       .font("Helvetica-Bold")
       .text(po[0].PO, 150, customerInformationTop)
       .font("Helvetica")
       .text("Date:", 50, customerInformationTop + 15)
       .text(info.DateOrdered, 150, customerInformationTop + 15)
-      .text("Total: ", 50, customerInformationTop + 30)
-      .text("-", 150, customerInformationTop + 30)
+      .text("Total Quantity: ", 50, customerInformationTop + 30)
+      .text(totalQty, 150, customerInformationTop + 30)
 
       //This is where the Supplier details lie
       .font("Helvetica-Bold")
-      .text("-", 300, customerInformationTop)
+      .text("Clinical Manager Signature:", 300, customerInformationTop)
       .font("Helvetica")
-      .text("-", 300, customerInformationTop + 15)
-      .text("-", 300, customerInformationTop + 30)
       .moveDown();
   }
 }
