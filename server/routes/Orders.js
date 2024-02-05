@@ -470,6 +470,7 @@ PartOrder.route("/PartOrder").post(async (req, res) => {
         lookUpSupplierId(supplier, "Suppliers"),
       ]);
 
+      //Make this a struct
       const values = [
         req.body.data[i].OrderCode,
         req.body.data[i].Qty,

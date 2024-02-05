@@ -312,41 +312,7 @@ function Layout({ children, position }) {
             </React.Fragment>
           ) : null}
 
-          {sidebar ? <Styleditemtitles>Medical</Styleditemtitles> : null}
 
-          {MedicalSidebarDataRestricted.map((item, index) => (
-            <React.Fragment key={item.title}>
-              <Link to={item.route} style={{ textDecoration: "none" }}>
-                <GridNavItems>
-                  <StyledIcons sidebar={sidebar}>{item.icon}</StyledIcons>
-                  <StyledListitems sidebar={sidebar}>
-                    {item.title}
-                  </StyledListitems>
-                  {sidebar && (
-                    <Styledarrow onClick={() => toggleMedicalSubmenu(index)}>
-                      {item.arrow}
-                    </Styledarrow>
-                  )}
-                </GridNavItems>
-              </Link>
-              {index === medicalSubmenuIndex &&
-                item.Submenu &&
-                item.Submenu.map((data) => (
-                  <Link
-                    to={data.route}
-                    key={data.title}
-                    style={{ textDecoration: "none" }}
-                  >
-                    <GridNavItems style={{ background: "#3b3b3b" }}>
-                      <StyledIcons sidebar={sidebar}>{data.icon}</StyledIcons>
-                      <StyledListitems sidebar={sidebar}>
-                        {data.title}
-                      </StyledListitems>
-                    </GridNavItems>
-                  </Link>
-                ))}
-            </React.Fragment>
-          ))}
         </GridNavItemsWrap>
       </GridNav>
       <GridMain sidebar={sidebar}>{children}</GridMain>

@@ -75,9 +75,10 @@ export function generateHeader(doc, user, type) {
   if (type == "Medicine") {
     doc
       .image(
-        "/Users/omarelmasaoudi/Desktop/aom/server/Images/airambulance.png",
-        50,
+        "/Users/omarelmasaoudi/Desktop/aom/server/Images/aomAmbulance.png",
+        40,
         45,
+        { width: 150 }
       )
       .fillColor("#444444")
       .fontSize(18)
@@ -91,7 +92,7 @@ export function generateHeader(doc, user, type) {
   } else {
     doc
       .image(
-        "/Users/omarelmasaoudi/Desktop/aom/server/Images/airAmbulance.png",
+        "/Users/omarelmasaoudi/Desktop/aom/server/Images/aomlogo.png",
         50,
         45,
         { width: 50 }

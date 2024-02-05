@@ -154,8 +154,8 @@ function Orderdetails() {
     title: "P.O",
     row: 2,
     col: 2,
-    disabled: true,
-    content: ordercode(numOfOrders),
+    disabled: false,
+    content: null
   });
 
   const dropdown = DropDownComp({
@@ -232,13 +232,13 @@ function Add() {
     }
   };
 
-  const addOrder = (product, product_type, qty, numOfOrder) => {
+  const addOrder = (product, product_type, qty, numOfOrder, po) => {
     if (Sanitize(qty, product, product_type)) {
       const newOrder = {
-        PO: ordercode(numOfOrder),
         Product: product,
         ProductType: product_type,
         Qty: qty,
+        PO: po,
       };
       const orderInfo = {
         uid: 1684438791,

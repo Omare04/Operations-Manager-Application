@@ -200,7 +200,6 @@ router.route("/login").post((req, res) => {
   const query = "SELECT * FROM users WHERE email = ?";
 
   pool.query(query, email, (err, result) => {
-    
     if (result.length > 0) {
       bcrypt.compare(password, result[0].password, (err, resultpass) => {
         if (err) {
