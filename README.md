@@ -1,5 +1,5 @@
 
-#Operations Manager application Operations Manager application
+# Operations Manager application Operations Manager application
 
 Significantly improves a company's operations in both its medical evacuation and maintenance sectors through robust stock management and order control.
 
